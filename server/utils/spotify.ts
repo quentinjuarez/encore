@@ -7,10 +7,13 @@ interface SpotifyTokens {
   access_token: string
   refresh_token?: string
   expires_in: number
+  scope?: string
 }
 
+type SpotifySession = NonNullable<Awaited<ReturnType<typeof getUserSession>>['spotify']>
+
 // Read the Spotify tokens out of the sealed session, or refuse.
-export async function requireSpotify(event: H3Event) {
+export async function requireSpotify(event: H3Event): Promise<SpotifySession> {
   const session = await getUserSession(event)
   if (!session.spotify?.accessToken) {
     throw createError({ statusCode: 401, statusMessage: 'Connect your Spotify account first' })
@@ -18,7 +21,7 @@ export async function requireSpotify(event: H3Event) {
   return session.spotify
 }
 
-async function refreshAccessToken(event: H3Event, refreshToken: string) {
+async function refreshAccessToken(event: H3Event, current: SpotifySession): Promise<SpotifySession> {
   const { clientId, clientSecret } = (useRuntimeConfig(event) as unknown as {
     oauth: { spotify: { clientId: string; clientSecret: string } }
   }).oauth.spotify
@@ -30,13 +33,14 @@ async function refreshAccessToken(event: H3Event, refreshToken: string) {
       Authorization: `Basic ${basic}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: refreshToken }).toString(),
+    body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: current.refreshToken }).toString(),
   })
 
-  const spotify = {
+  const spotify: SpotifySession = {
     accessToken: res.access_token,
-    refreshToken: res.refresh_token || refreshToken, // Spotify may not resend it
+    refreshToken: res.refresh_token || current.refreshToken, // Spotify may not resend it
     expiresAt: Date.now() + res.expires_in * 1000,
+    scope: res.scope || current.scope, // keep the granted scope if not resent
   }
   await setUserSession(event, { spotify })
   return spotify
@@ -52,7 +56,7 @@ export async function spotifyFetch<T>(
   let tokens = await requireSpotify(event)
 
   if (Date.now() > tokens.expiresAt - 30_000) {
-    tokens = await refreshAccessToken(event, tokens.refreshToken)
+    tokens = await refreshAccessToken(event, tokens)
   }
 
   const call = (accessToken: string) =>
@@ -66,13 +70,13 @@ export async function spotifyFetch<T>(
   } catch (err) {
     if (isUnauthorized(err)) {
       try {
-        const refreshed = await refreshAccessToken(event, tokens.refreshToken)
+        const refreshed = await refreshAccessToken(event, tokens)
         return await call(refreshed.accessToken)
       } catch (retryErr) {
-        throw spotifyError(retryErr)
+        throw spotifyError(retryErr, path, tokens.scope)
       }
     }
-    throw spotifyError(err)
+    throw spotifyError(err, path, tokens.scope)
   }
 }
 
@@ -80,15 +84,16 @@ function isUnauthorized(err: unknown): boolean {
   return typeof err === 'object' && err !== null && (err as { statusCode?: number }).statusCode === 401
 }
 
-// Turn an opaque Spotify fetch failure into an HTTP error that carries
-// Spotify's own message through to the client (e.g. "Insufficient client scope").
-function spotifyError(err: unknown) {
+// Turn an opaque Spotify failure into an HTTP error that carries Spotify's own
+// message (e.g. "Insufficient client scope") and the scopes the token holds.
+function spotifyError(err: unknown, path: string, grantedScope?: string) {
   const e = err as { status?: number; statusCode?: number; data?: { error?: { message?: string } } }
   const status = e.status || e.statusCode || 502
   const reason = e.data?.error?.message || null
+  console.error(`[spotify] ${path} failed (${status}): ${reason} | granted scope: ${grantedScope ?? 'unknown'}`)
   return createError({
     statusCode: status,
     statusMessage: 'Spotify request failed',
-    data: { reason, status },
+    data: { reason, status, grantedScope: grantedScope ?? null },
   })
 }

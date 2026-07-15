@@ -14,6 +14,7 @@ export default defineOAuthSpotifyEventHandler({
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
         expiresAt: Date.now() + tokens.expires_in * 1000,
+        scope: (tokens as { scope?: string }).scope,
       },
     })
 

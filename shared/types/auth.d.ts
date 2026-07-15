@@ -11,6 +11,7 @@ declare module '#auth-utils' {
       accessToken: string
       refreshToken: string
       expiresAt: number // epoch ms
+      scope?: string // space-separated scopes actually granted
     }
   }
 }
