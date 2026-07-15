@@ -17,10 +17,12 @@ non-commercial project.
 
 ## Setup
 
+Uses Yarn 3.8.6 (Berry) via Corepack. Run `corepack enable` once, then:
+
 ```bash
-pnpm install
+yarn install
 cp .env.example .env   # then fill it in
-pnpm dev
+yarn dev
 ```
 
 Fill `.env` with:
@@ -35,11 +37,11 @@ Fill `.env` with:
 ## Scripts
 
 ```bash
-pnpm dev          # dev server
-pnpm build        # production build (Vercel preset auto-detected)
-pnpm test         # run the matching self-check
-pnpm typecheck    # vue-tsc
-pnpm assets       # regenerate icons + OG image from app/assets/brand/*.svg
+yarn dev          # dev server
+yarn build        # production build (Vercel preset auto-detected)
+yarn test         # run the matching self-check
+yarn typecheck    # vue-tsc
+yarn assets       # regenerate icons + OG image from app/assets/brand/*.svg
 ```
 
 ## How it works

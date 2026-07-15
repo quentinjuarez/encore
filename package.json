@@ -2,6 +2,7 @@
   "name": "encore",
   "private": true,
   "type": "module",
+  "packageManager": "yarn@3.8.6",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
