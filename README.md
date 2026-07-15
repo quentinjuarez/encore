@@ -29,8 +29,10 @@ Fill `.env` with:
 
 - `NUXT_SETLISTFM_API_KEY` - register a free key at api.setlist.fm (non-commercial).
 - `NUXT_OAUTH_SPOTIFY_CLIENT_ID` / `NUXT_OAUTH_SPOTIFY_CLIENT_SECRET` - create an app at
-  developer.spotify.com and add the redirect URIs `http://localhost:3000/auth/spotify`
-  and `https://YOUR_DOMAIN/auth/spotify`.
+  developer.spotify.com and add the redirect URIs `http://127.0.0.1:3000/auth/spotify`
+  and `https://YOUR_DOMAIN/auth/spotify`. Spotify requires HTTPS and only permits http
+  on the `127.0.0.1` loopback, so browse the app locally at `http://127.0.0.1:3000`, not
+  `localhost`.
 - `NUXT_SESSION_PASSWORD` - any 32+ character secret (`openssl rand -base64 32`).
 - `NUXT_PUBLIC_SITE_URL` - used for canonical and Open Graph tags.
 

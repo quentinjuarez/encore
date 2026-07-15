@@ -2,7 +2,8 @@
 // tokens in the sealed session and bounce the user back where they started.
 export default defineOAuthSpotifyEventHandler({
   config: {
-    scope: ['playlist-modify-public', 'playlist-modify-private', 'user-read-private'],
+    // Minimum scope: we create private playlists and add items to them.
+    scope: ['playlist-modify-private'],
     // Always show the consent screen so a reconnect refreshes the granted
     // scopes (a refreshed token never gains scopes the grant didn't include).
     authorizationParams: { show_dialog: 'true' },

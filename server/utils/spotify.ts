@@ -12,6 +12,8 @@ interface SpotifyTokens {
 
 type SpotifySession = NonNullable<Awaited<ReturnType<typeof getUserSession>>['spotify']>
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 // Read the Spotify tokens out of the sealed session, or refuse.
 export async function requireSpotify(event: H3Event): Promise<SpotifySession> {
   const session = await getUserSession(event)
@@ -27,27 +29,37 @@ async function refreshAccessToken(event: H3Event, current: SpotifySession): Prom
   }).oauth.spotify
 
   const basic = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
-  const res = await $fetch<SpotifyTokens>(TOKEN_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${basic}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: current.refreshToken }).toString(),
-  })
+
+  let res: SpotifyTokens
+  try {
+    res = await $fetch<SpotifyTokens>(TOKEN_URL, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${basic}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: current.refreshToken }).toString(),
+    })
+  } catch (err) {
+    const status = (err as { status?: number; statusCode?: number }).status ?? (err as { statusCode?: number }).statusCode
+    // A rejected refresh token means the grant is gone: clear the session so the
+    // user is sent back through authorization. Transient failures are not fatal.
+    if (status === 400 || status === 401) {
+      await clearUserSession(event)
+      throw createError({ statusCode: 401, statusMessage: 'Spotify session expired, please reconnect' })
+    }
+    throw createError({ statusCode: 502, statusMessage: 'Could not refresh the Spotify token' })
+  }
 
   const spotify: SpotifySession = {
     accessToken: res.access_token,
     refreshToken: res.refresh_token || current.refreshToken, // Spotify may not resend it
     expiresAt: Date.now() + res.expires_in * 1000,
-    scope: res.scope || current.scope, // keep the granted scope if not resent
+    scope: res.scope || current.scope,
   }
   await setUserSession(event, { spotify })
   return spotify
 }
 
-// Authenticated Spotify call. Refreshes proactively near expiry and once
-// more if the token is rejected mid-flight.
+// Authenticated Spotify call. Refreshes near expiry and once more on a 401,
+// and backs off on 429 while respecting Retry-After.
 export async function spotifyFetch<T>(
   event: H3Event,
   path: string,
@@ -60,23 +72,45 @@ export async function spotifyFetch<T>(
   }
 
   const call = (accessToken: string) =>
-    $fetch<T>(`${API}${path}`, {
-      ...opts,
-      headers: { Authorization: `Bearer ${accessToken}`, ...(opts?.headers as Record<string, string>) },
-    })
+    withRateLimit(() =>
+      $fetch<T>(`${API}${path}`, {
+        ...opts,
+        headers: { Authorization: `Bearer ${accessToken}`, ...(opts?.headers as Record<string, string>) },
+      }),
+    )
 
   try {
     return await call(tokens.accessToken)
   } catch (err) {
     if (isUnauthorized(err)) {
+      const refreshed = await refreshAccessToken(event, tokens)
       try {
-        const refreshed = await refreshAccessToken(event, tokens)
         return await call(refreshed.accessToken)
       } catch (retryErr) {
-        throw spotifyError(retryErr, path, tokens.scope)
+        throw spotifyError(retryErr, path, refreshed.scope)
       }
     }
     throw spotifyError(err, path, tokens.scope)
+  }
+}
+
+// Retry 429s with exponential backoff, honoring Retry-After when Spotify sends it.
+async function withRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fn()
+    } catch (err) {
+      const e = err as {
+        status?: number
+        statusCode?: number
+        response?: { headers?: { get?: (k: string) => string | null } }
+      }
+      const status = e.status ?? e.statusCode
+      if (status !== 429 || attempt >= maxRetries) throw err
+      const retryAfter = Number(e.response?.headers?.get?.('retry-after')) || 0
+      const backoff = Math.min(1000 * 2 ** attempt, 8000)
+      await sleep(Math.min(retryAfter > 0 ? retryAfter * 1000 : backoff, 10_000))
+    }
   }
 }
 

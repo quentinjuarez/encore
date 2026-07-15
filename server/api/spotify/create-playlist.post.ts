@@ -25,8 +25,9 @@ export default defineEventHandler(async (event): Promise<{ id: string; url: stri
     },
   })
 
+  // /items is the current endpoint; /tracks is deprecated. Max 100 per request.
   for (let i = 0; i < uris.length; i += 100) {
-    await spotifyFetch(event, `/playlists/${playlist.id}/tracks`, {
+    await spotifyFetch(event, `/playlists/${playlist.id}/items`, {
       method: 'POST',
       body: { uris: uris.slice(i, i + 100) },
     })
