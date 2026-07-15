@@ -30,7 +30,7 @@ useSeoMeta({
       />
 
       <template v-else-if="q">
-        <div v-if="data?.artists?.length" class="grid gap-3">
+        <div v-if="data?.artists?.length" class="flex flex-col gap-3">
           <ArtistResult v-for="a in data.artists" :key="a.mbid" :artist="a" />
         </div>
         <EmptyState

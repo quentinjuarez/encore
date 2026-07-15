@@ -3,7 +3,7 @@ defineProps<{ artist: SetlistArtist }>()
 </script>
 
 <template>
-  <NuxtLink :to="`/artist/${artist.mbid}`" class="block">
+  <NuxtLink :to="`/artist/${artist.mbid}`" class="block min-w-0">
     <UiCard interactive>
       <div class="flex items-center gap-4 p-4">
         <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-espresso bg-mustard">
