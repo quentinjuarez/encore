@@ -1,12 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Encore">
-  <rect width="512" height="512" rx="112" fill="#e0662e"/>
-  <!-- vinyl record -->
-  <circle cx="256" cy="256" r="178" fill="#2b2118"/>
-  <circle cx="256" cy="256" r="146" fill="none" stroke="#f5ecd7" stroke-opacity="0.12" stroke-width="6"/>
-  <circle cx="256" cy="256" r="116" fill="none" stroke="#f5ecd7" stroke-opacity="0.12" stroke-width="6"/>
-  <!-- sheen -->
-  <path d="M256 78 a178 178 0 0 1 126 52" fill="none" stroke="#f5ecd7" stroke-opacity="0.18" stroke-width="10" stroke-linecap="round"/>
-  <!-- label + play mark (listen to the set) -->
-  <circle cx="256" cy="256" r="78" fill="#f5ecd7"/>
-  <path d="M236 214 L236 298 L312 256 Z" fill="#e0662e"/>
+  <rect width="512" height="512" rx="112" fill="#2b2118"/>
+  <g transform="rotate(-7 256 256)">
+    <!-- ticket body -->
+    <rect x="88" y="168" width="336" height="176" rx="28" fill="#f5ecd7"/>
+    <!-- tear notches + perforation -->
+    <circle cx="306" cy="168" r="15" fill="#2b2118"/>
+    <circle cx="306" cy="344" r="15" fill="#2b2118"/>
+    <line x1="306" y1="192" x2="306" y2="320" stroke="#2b2118" stroke-width="6" stroke-dasharray="2 17" stroke-linecap="round"/>
+    <!-- E monogram: bars are a shrinking setlist -->
+    <rect x="126" y="196" width="34" height="120" rx="17" fill="#e0662e"/>
+    <rect x="150" y="196" width="118" height="32" rx="16" fill="#e0662e"/>
+    <rect x="150" y="240" width="92" height="32" rx="16" fill="#e0662e"/>
+    <rect x="150" y="284" width="70" height="32" rx="16" fill="#e0662e"/>
+    <!-- play punch on the stub -->
+    <path d="M348 230 L348 282 L392 256 Z" fill="#e7b84b"/>
+  </g>
 </svg>

@@ -16,12 +16,20 @@
     </g>
   </g>
 
-  <!-- vinyl mark -->
-  <g transform="translate(150 200)">
-    <circle cx="115" cy="115" r="115" fill="#2b2118"/>
-    <circle cx="115" cy="115" r="94" fill="none" stroke="#f5ecd7" stroke-opacity="0.14" stroke-width="4"/>
-    <circle cx="115" cy="115" r="50" fill="#f5ecd7"/>
-    <path d="M102 90 L102 140 L146 115 Z" fill="#e0662e"/>
+  <!-- ticket mark (app icon, scaled) -->
+  <g transform="translate(150 200) scale(0.45)">
+    <rect width="512" height="512" rx="112" fill="#2b2118"/>
+    <g transform="rotate(-7 256 256)">
+      <rect x="88" y="168" width="336" height="176" rx="28" fill="#f5ecd7"/>
+      <circle cx="306" cy="168" r="15" fill="#2b2118"/>
+      <circle cx="306" cy="344" r="15" fill="#2b2118"/>
+      <line x1="306" y1="192" x2="306" y2="320" stroke="#2b2118" stroke-width="6" stroke-dasharray="2 17" stroke-linecap="round"/>
+      <rect x="126" y="196" width="34" height="120" rx="17" fill="#e0662e"/>
+      <rect x="150" y="196" width="118" height="32" rx="16" fill="#e0662e"/>
+      <rect x="150" y="240" width="92" height="32" rx="16" fill="#e0662e"/>
+      <rect x="150" y="284" width="70" height="32" rx="16" fill="#e0662e"/>
+      <path d="M348 230 L348 282 L392 256 Z" fill="#e7b84b"/>
+    </g>
   </g>
 
   <!-- wordmark + tagline (font-family falls back to system bold if Fredoka is absent) -->

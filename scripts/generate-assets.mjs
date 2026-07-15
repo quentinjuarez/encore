@@ -11,7 +11,8 @@ const brand = (f) => resolve(root, 'app/assets/brand', f)
 const pub = (f) => resolve(root, 'public', f)
 
 const ICON = brand('icon.svg')
-const BURNT = '#e0662e'
+// Matches the icon's rounded-square ground, so flattened corners stay seamless.
+const GROUND = '#2b2118'
 
 // High render density keeps edges crisp; we downscale to the target afterwards.
 async function png(src, size, out, { background } = {}) {
@@ -32,11 +33,11 @@ async function main() {
   console.log('  public/favicon.svg')
 
   await png(ICON, 32, 'favicon-32.png')
-  await png(ICON, 180, 'apple-touch-icon.png', { background: BURNT })
+  await png(ICON, 180, 'apple-touch-icon.png', { background: GROUND })
   await png(ICON, 192, 'icon-192.png')
   await png(ICON, 512, 'icon-512.png')
   // Maskable: fill the whole square so no transparent corners survive the mask.
-  await png(ICON, 512, 'icon-maskable-512.png', { background: BURNT })
+  await png(ICON, 512, 'icon-maskable-512.png', { background: GROUND })
 
   await sharp(brand('og.svg'), { density: 200 }).resize(1200, 630).png().toFile(pub('og.png'))
   console.log('  public/og.png')
