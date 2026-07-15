@@ -170,7 +170,7 @@ function reportError(err: unknown) {
             </ol>
           </div>
           <p class="mt-4 border-t border-sand pt-3 font-mono text-xs text-cocoa">
-            {{ total }} songs &middot; source
+            {{ total }} songs · source
             <a :href="setlist.url" class="underline decoration-mustard underline-offset-2">setlist.fm</a>
           </p>
         </div>

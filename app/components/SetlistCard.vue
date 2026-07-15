@@ -18,7 +18,7 @@ const location = computed(() =>
             {{ setlist.venue?.name || 'Unknown venue' }}
           </h3>
           <p class="truncate text-sm text-cocoa">
-            {{ location }}<span v-if="setlist.tour?.name"> &middot; {{ setlist.tour.name }}</span>
+            {{ location }}<span v-if="setlist.tour?.name"> · {{ setlist.tour.name }}</span>
           </p>
         </div>
         <span v-if="songs" class="badge shrink-0">{{ songs }} songs</span>

@@ -71,7 +71,7 @@ function select(track: TrackCandidate) {
 
       <span class="min-w-0 flex-1">
         <span class="block truncate font-medium text-espresso">{{ match.song }}</span>
-        <span v-if="match.matched" class="block truncate text-sm text-cocoa">{{ match.title }} &middot; {{ match.artist }}</span>
+        <span v-if="match.matched" class="block truncate text-sm text-cocoa">{{ match.title }} · {{ match.artist }}</span>
         <span v-else class="block truncate text-sm text-burnt">No confident match</span>
       </span>
 

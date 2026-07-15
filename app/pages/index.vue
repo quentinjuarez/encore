@@ -49,7 +49,7 @@ const steps = [
     <!-- Hero -->
     <section class="mx-auto grid max-w-5xl items-center gap-10 px-4 pb-8 pt-12 md:grid-cols-2 md:pt-20">
       <div>
-        <p class="font-mono text-sm font-bold uppercase tracking-widest text-teal">Setlist &rarr; Playlist</p>
+        <p class="font-mono text-sm font-bold uppercase tracking-widest text-teal">Setlist → Playlist</p>
         <h1 class="mt-3 font-display text-4xl font-bold leading-[1.02] text-espresso sm:text-5xl md:text-6xl">
           The show doesn't have to end when the lights come up.
         </h1>
@@ -77,7 +77,7 @@ const steps = [
       <div class="relative mx-auto w-full max-w-sm">
         <div class="absolute -left-3 -top-3 h-16 w-24 -rotate-6 rounded bg-mustard/70 shadow" aria-hidden="true" />
         <div class="setlist-sheet -rotate-1 rounded-2xl border-2 border-espresso p-6">
-          <p class="font-mono text-xs uppercase tracking-widest text-cocoa">Red Rocks &middot; 2025</p>
+          <p class="font-mono text-xs uppercase tracking-widest text-cocoa">Red Rocks · 2025</p>
           <p class="mt-1 font-display text-2xl font-bold text-espresso">The Encore Band</p>
           <ol class="mt-4">
             <li
