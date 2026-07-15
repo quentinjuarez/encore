@@ -120,8 +120,11 @@ function reportError(err: unknown) {
 
 <template>
   <div class="mx-auto max-w-5xl px-4 py-10">
-    <NuxtLink to="/" class="inline-flex items-center gap-1 text-sm font-semibold text-cocoa hover:text-espresso">
-      <Icon name="ph:arrow-left-bold" size="16" /> New search
+    <NuxtLink
+      :to="setlist ? `/artist/${setlist.artist.mbid}` : '/'"
+      class="inline-flex items-center gap-1 text-sm font-semibold text-cocoa hover:text-espresso"
+    >
+      <Icon name="ph:arrow-left-bold" size="16" /> {{ setlist ? 'Back to shows' : 'New search' }}
     </NuxtLink>
 
     <div v-if="pending" class="flex justify-center py-24 text-burnt">

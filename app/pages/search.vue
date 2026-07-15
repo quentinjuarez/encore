@@ -37,7 +37,7 @@ useSeoMeta({
           v-else
           icon="ph:magnifying-glass"
           title="No artists found"
-          :message="`Nothing came back for “${q}”. Check the spelling and try again.`"
+          :message="`Nothing came back for '${q}'. Check the spelling and try again.`"
         />
       </template>
 

@@ -49,7 +49,9 @@ const steps = [
     <!-- Hero -->
     <section class="mx-auto grid max-w-5xl items-center gap-10 px-4 pb-8 pt-12 md:grid-cols-2 md:pt-20">
       <div>
-        <p class="font-mono text-sm font-bold uppercase tracking-widest text-teal">Setlist → Playlist</p>
+        <p class="inline-flex items-center gap-1.5 font-mono text-sm font-bold uppercase tracking-widest text-teal">
+          Setlist <Icon name="ph:arrow-right-bold" size="14" /> Playlist
+        </p>
         <h1 class="mt-3 font-display text-4xl font-bold leading-[1.02] text-espresso sm:text-5xl md:text-6xl">
           The show doesn't have to end when the lights come up.
         </h1>
