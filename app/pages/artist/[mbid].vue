@@ -40,7 +40,7 @@ useSeoMeta({
         <h1 class="mt-1 font-display text-3xl font-bold text-espresso sm:text-4xl">{{ artistName }}</h1>
       </header>
 
-      <div v-if="data?.setlists?.length" class="mt-8 grid gap-4 sm:grid-cols-2">
+      <div v-if="data?.setlists?.length" class="mt-8 flex flex-col gap-3">
         <SetlistCard v-for="s in data.setlists" :key="s.id" :setlist="s" />
       </div>
 

@@ -37,6 +37,14 @@ export interface Setlist {
   url: string
 }
 
+// A Spotify track the user can pick from a manual search.
+export interface TrackCandidate {
+  uri: string
+  title: string
+  artist: string
+  albumArt: string | null
+}
+
 // One resolved match: a setlist song lined up against a Spotify track.
 export interface TrackMatch {
   song: string

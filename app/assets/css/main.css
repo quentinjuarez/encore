@@ -52,21 +52,12 @@
     background: transparent;
   }
 
-  /* The setlist "sheet": a taped page with a torn bottom edge. */
+  /* The setlist "sheet": a clean taped page. */
   .setlist-sheet {
     position: relative;
     background: var(--color-paper);
+    border: 2px solid var(--color-espresso);
     box-shadow: var(--shadow-card);
-  }
-  .setlist-sheet::after {
-    content: "";
-    position: absolute;
-    inset-inline: 0;
-    bottom: -11px;
-    height: 12px;
-    background: var(--color-paper);
-    -webkit-mask: repeating-linear-gradient(-45deg, #000 0 10px, transparent 10px 20px);
-    mask: repeating-linear-gradient(-45deg, #000 0 10px, transparent 10px 20px);
   }
 }
 

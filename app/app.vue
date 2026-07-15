@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-[100dvh] flex-col">
+  <div class="flex min-h-[100dvh] flex-col overflow-x-clip">
     <AppHeader />
     <main class="flex-1">
       <NuxtPage />

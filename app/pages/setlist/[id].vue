@@ -86,6 +86,21 @@ async function create() {
   }
 }
 
+// Manual pick from MatchRow's Spotify search: mark it matched and include it.
+function assign(i: number, track: TrackCandidate) {
+  const m = matches.value[i]
+  if (!m) return
+  matches.value[i] = {
+    ...m,
+    matched: true,
+    uri: track.uri,
+    title: track.title,
+    artist: track.artist,
+    albumArt: track.albumArt,
+  }
+  included.value[i] = true
+}
+
 function reportError(err: unknown) {
   const status = (err as { statusCode?: number })?.statusCode
   if (status === 401) toast.error('Your Spotify session expired. Reconnect and try again.')
@@ -184,11 +199,17 @@ function reportError(err: unknown) {
             <!-- Preview matches -->
             <template v-else-if="phase === 'preview'">
               <p class="mt-2 text-sm text-cocoa">
-                Matched <strong class="text-espresso">{{ matchedCount }}</strong> of {{ matches.length }}. Untick
-                anything that looks wrong.
+                Matched <strong class="text-espresso">{{ matchedCount }}</strong> of {{ matches.length }}. Untick a
+                wrong one, or fix a miss with Find it.
               </p>
               <ul class="mt-3 max-h-[46vh] overflow-y-auto pr-1">
-                <MatchRow v-for="(m, i) in matches" :key="i" v-model="included[i]" :match="m" />
+                <MatchRow
+                  v-for="(m, i) in matches"
+                  :key="i"
+                  v-model="included[i]"
+                  :match="m"
+                  @assign="assign(i, $event)"
+                />
               </ul>
               <UiButton block class="mt-4" :disabled="selectedUris.length === 0" @click="create">
                 Create playlist ({{ selectedUris.length }})
