@@ -65,13 +65,30 @@ export async function spotifyFetch<T>(
     return await call(tokens.accessToken)
   } catch (err) {
     if (isUnauthorized(err)) {
-      const refreshed = await refreshAccessToken(event, tokens.refreshToken)
-      return await call(refreshed.accessToken)
+      try {
+        const refreshed = await refreshAccessToken(event, tokens.refreshToken)
+        return await call(refreshed.accessToken)
+      } catch (retryErr) {
+        throw spotifyError(retryErr)
+      }
     }
-    throw err
+    throw spotifyError(err)
   }
 }
 
 function isUnauthorized(err: unknown): boolean {
   return typeof err === 'object' && err !== null && (err as { statusCode?: number }).statusCode === 401
+}
+
+// Turn an opaque Spotify fetch failure into an HTTP error that carries
+// Spotify's own message through to the client (e.g. "Insufficient client scope").
+function spotifyError(err: unknown) {
+  const e = err as { status?: number; statusCode?: number; data?: { error?: { message?: string } } }
+  const status = e.status || e.statusCode || 502
+  const reason = e.data?.error?.message || null
+  return createError({
+    statusCode: status,
+    statusMessage: 'Spotify request failed',
+    data: { reason, status },
+  })
 }

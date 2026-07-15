@@ -102,9 +102,17 @@ function assign(i: number, track: TrackCandidate) {
 }
 
 function reportError(err: unknown) {
-  const status = (err as { statusCode?: number })?.statusCode
-  if (status === 401) toast.error('Your Spotify session expired. Reconnect and try again.')
-  else toast.error('Something went wrong talking to Spotify. Try again.')
+  const body = (err as { statusCode?: number; data?: { statusCode?: number; data?: { reason?: string } } })
+  const status = body?.data?.statusCode ?? body?.statusCode
+  const reason = body?.data?.data?.reason
+
+  if (status === 401) {
+    toast.error('Your Spotify session expired. Sign out and reconnect.')
+  } else if (status === 403) {
+    toast.error('Spotify refused this (likely a permissions issue). Sign out, reconnect, and try again.')
+  } else {
+    toast.error(reason ? `Spotify error: ${reason}` : 'Something went wrong talking to Spotify. Try again.')
+  }
 }
 </script>
 

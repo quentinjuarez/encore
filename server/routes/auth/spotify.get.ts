@@ -3,6 +3,9 @@
 export default defineOAuthSpotifyEventHandler({
   config: {
     scope: ['playlist-modify-public', 'playlist-modify-private', 'user-read-private'],
+    // Always show the consent screen so a reconnect refreshes the granted
+    // scopes (a refreshed token never gains scopes the grant didn't include).
+    authorizationParams: { show_dialog: 'true' },
   },
   async onSuccess(event, { user, tokens }) {
     await setUserSession(event, {
