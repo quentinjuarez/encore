@@ -14,9 +14,9 @@ export default defineEventHandler(async (event): Promise<{ id: string; url: stri
     throw createError({ statusCode: 400, statusMessage: 'No tracks to add' })
   }
 
-  const me = await spotifyFetch<{ id: string }>(event, '/me')
-
-  const playlist = await spotifyFetch<CreatedPlaylist>(event, `/users/${me.id}/playlists`, {
+  // Spotify's Feb 2026 API migration removed POST /users/{id}/playlists for
+  // development-mode apps (returns 403). POST /me/playlists is the replacement.
+  const playlist = await spotifyFetch<CreatedPlaylist>(event, '/me/playlists', {
     method: 'POST',
     body: {
       name,
