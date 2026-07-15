@@ -1,0 +1,14 @@
+{
+  "name": "Encore",
+  "short_name": "Encore",
+  "description": "Turn concert setlists into Spotify playlists.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5ecd7",
+  "theme_color": "#e0662e",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

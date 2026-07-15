@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Encore - turn concert setlists into Spotify playlists">
+  <rect width="1200" height="630" fill="#f5ecd7"/>
+
+  <!-- sunburst, top-right corner -->
+  <g fill="#e7b84b" opacity="0.85">
+    <g>
+      <polygon points="1120,90 1160,90 1140,-90"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(40 1140 90)"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(80 1140 90)"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(120 1140 90)"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(160 1140 90)"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(200 1140 90)"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(240 1140 90)"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(280 1140 90)"/>
+      <polygon points="1120,90 1160,90 1140,-90" transform="rotate(320 1140 90)"/>
+    </g>
+  </g>
+
+  <!-- vinyl mark -->
+  <g transform="translate(150 200)">
+    <circle cx="115" cy="115" r="115" fill="#2b2118"/>
+    <circle cx="115" cy="115" r="94" fill="none" stroke="#f5ecd7" stroke-opacity="0.14" stroke-width="4"/>
+    <circle cx="115" cy="115" r="50" fill="#f5ecd7"/>
+    <path d="M102 90 L102 140 L146 115 Z" fill="#e0662e"/>
+  </g>
+
+  <!-- wordmark + tagline (font-family falls back to system bold if Fredoka is absent) -->
+  <text x="418" y="300" font-family="Fredoka, 'Trebuchet MS', Verdana, sans-serif" font-size="150" font-weight="700" fill="#2b2118">Encore</text>
+  <rect x="422" y="330" width="290" height="12" rx="6" fill="#e0662e"/>
+  <text x="422" y="398" font-family="Nunito, Verdana, sans-serif" font-size="31" fill="#6b5844">Turn concert setlists into Spotify playlists.</text>
+</svg>

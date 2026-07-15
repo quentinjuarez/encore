@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* ---- Encore design tokens: 70s cream + soul ---- */
+@theme {
+  --color-cream: #f5ecd7;
+  --color-paper: #fbf6e7;
+  --color-sand: #e7d8b0;
+  --color-espresso: #2b2118;
+  --color-cocoa: #6b5844;
+  --color-burnt: #e0662e;
+  --color-burntdark: #c14f1e;
+  --color-mustard: #e7b84b;
+  --color-teal: #2e8c8c;
+  --color-rose: #e58c7d;
+
+  --font-display: "Fredoka", "Trebuchet MS", sans-serif;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SF Mono", monospace;
+
+  --radius-blob: 1.75rem;
+
+  --shadow-pop: 0 3px 0 0 #2b2118;
+  --shadow-card: 0 12px 34px -14px rgba(43, 33, 24, 0.4);
+}
+
+/* Utilities the components lean on. */
+@layer components {
+  /* Slow vinyl spin for the hero record. */
+  @keyframes encore-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .spin-slow {
+    animation: encore-spin 8s linear infinite;
+  }
+
+  /* Small monospace tag used for covers, tapes, tour names. */
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.01em;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    background: var(--color-sand);
+    color: var(--color-cocoa);
+    border: 1px solid var(--color-espresso);
+    white-space: nowrap;
+  }
+  .badge--muted {
+    background: transparent;
+  }
+
+  /* The setlist "sheet": a taped page with a torn bottom edge. */
+  .setlist-sheet {
+    position: relative;
+    background: var(--color-paper);
+    box-shadow: var(--shadow-card);
+  }
+  .setlist-sheet::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -11px;
+    height: 12px;
+    background: var(--color-paper);
+    -webkit-mask: repeating-linear-gradient(-45deg, #000 0 10px, transparent 10px 20px);
+    mask: repeating-linear-gradient(-45deg, #000 0 10px, transparent 10px 20px);
+  }
+}
+
+@layer base {
+  html {
+    background-color: var(--color-cream);
+    color: var(--color-espresso);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    min-height: 100dvh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--color-mustard);
+    color: var(--color-espresso);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-teal);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Reduced motion: kill the groovy animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
