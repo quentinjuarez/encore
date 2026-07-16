@@ -3,12 +3,16 @@ withDefaults(defineProps<{ size?: number; showWord?: boolean; tone?: 'ink' | 'cr
   size: 40,
   showWord: true,
   tone: 'ink',
-})
+});
 </script>
 
 <template>
   <span class="inline-flex items-center gap-2.5">
-    <svg :style="{ width: `${size}px`, height: `${size}px` }" viewBox="0 0 512 512" aria-hidden="true">
+    <svg
+      :style="{ width: `${size}px`, height: `${size}px` }"
+      viewBox="0 0 512 512"
+      aria-hidden="true"
+    >
       <rect width="512" height="512" rx="112" fill="#2b2118" />
       <g transform="rotate(-7 256 256)">
         <rect x="88" y="168" width="336" height="176" rx="28" fill="#f5ecd7" />

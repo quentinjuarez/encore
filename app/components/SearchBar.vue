@@ -1,11 +1,14 @@
 <script setup lang="ts">
-const props = withDefaults(defineProps<{ initial?: string; big?: boolean }>(), { initial: '', big: false })
-const q = ref(props.initial)
+const props = withDefaults(defineProps<{ initial?: string; big?: boolean }>(), {
+  initial: '',
+  big: false,
+});
+const q = ref(props.initial);
 
 async function submit() {
-  const term = q.value.trim()
-  if (!term) return
-  await navigateTo({ path: '/search', query: { q: term } })
+  const term = q.value.trim();
+  if (!term) return;
+  await navigateTo({ path: '/search', query: { q: term } });
 }
 </script>
 

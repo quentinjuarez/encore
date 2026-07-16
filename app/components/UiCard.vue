@@ -2,7 +2,7 @@
 withDefaults(defineProps<{ interactive?: boolean; tone?: 'paper' | 'cream' }>(), {
   interactive: false,
   tone: 'paper',
-})
+});
 </script>
 
 <template>

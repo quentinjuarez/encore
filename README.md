@@ -43,6 +43,8 @@ yarn dev          # dev server
 yarn build        # production build (Vercel preset auto-detected)
 yarn test         # run the matching self-check
 yarn typecheck    # vue-tsc
+yarn lint         # oxlint (add --fix, or run: yarn lint:fix)
+yarn format       # oxfmt, format in place (yarn format:check to verify)
 yarn assets       # regenerate icons + OG image from app/assets/brand/*.svg
 ```
 

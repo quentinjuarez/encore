@@ -1,45 +1,45 @@
 <script setup lang="ts">
-const props = defineProps<{ match: TrackMatch }>()
-const included = defineModel<boolean>({ default: true })
-const emit = defineEmits<{ assign: [track: TrackCandidate] }>()
-const toast = useToast()
+const props = defineProps<{ match: TrackMatch }>();
+const included = defineModel<boolean>({ default: true });
+const emit = defineEmits<{ assign: [track: TrackCandidate] }>();
+const toast = useToast();
 
-const editing = ref(false)
-const query = ref('')
-const results = ref<TrackCandidate[]>([])
-const searching = ref(false)
-const searched = ref(false)
+const editing = ref(false);
+const query = ref('');
+const results = ref<TrackCandidate[]>([]);
+const searching = ref(false);
+const searched = ref(false);
 
 function toggleEditor() {
   if (editing.value) {
-    editing.value = false
-    return
+    editing.value = false;
+    return;
   }
-  editing.value = true
-  searched.value = false
-  results.value = []
-  if (!query.value) query.value = props.match.song
-  search()
+  editing.value = true;
+  searched.value = false;
+  results.value = [];
+  if (!query.value) query.value = props.match.song;
+  search();
 }
 
 async function search() {
-  const q = query.value.trim()
-  if (!q) return
-  searching.value = true
+  const q = query.value.trim();
+  if (!q) return;
+  searching.value = true;
   try {
-    const res = await $fetch('/api/spotify/search', { query: { q } })
-    results.value = res.tracks
-    searched.value = true
+    const res = await $fetch('/api/spotify/search', { query: { q } });
+    results.value = res.tracks;
+    searched.value = true;
   } catch {
-    toast.error('Spotify search failed. Try again.')
+    toast.error('Spotify search failed. Try again.');
   } finally {
-    searching.value = false
+    searching.value = false;
   }
 }
 
 function select(track: TrackCandidate) {
-  emit('assign', track)
-  editing.value = false
+  emit('assign', track);
+  editing.value = false;
 }
 </script>
 
@@ -65,13 +65,18 @@ function select(track: TrackCandidate) {
         height="44"
         class="h-11 w-11 shrink-0 rounded-lg border-2 border-espresso object-cover"
       />
-      <span v-else class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border-2 border-espresso bg-cream">
+      <span
+        v-else
+        class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border-2 border-espresso bg-cream"
+      >
         <Icon name="ph:music-notes" size="20" class="text-cocoa" />
       </span>
 
       <span class="min-w-0 flex-1">
         <span class="block truncate font-medium text-espresso">{{ match.song }}</span>
-        <span v-if="match.matched" class="block truncate text-sm text-cocoa">{{ match.title }} · {{ match.artist }}</span>
+        <span v-if="match.matched" class="block truncate text-sm text-cocoa"
+          >{{ match.title }} · {{ match.artist }}</span
+        >
         <span v-else class="block truncate text-sm text-burnt">No confident match</span>
       </span>
 
@@ -123,7 +128,10 @@ function select(track: TrackCandidate) {
               height="36"
               class="h-9 w-9 shrink-0 rounded border border-espresso object-cover"
             />
-            <span v-else class="grid h-9 w-9 shrink-0 place-items-center rounded border border-espresso bg-paper">
+            <span
+              v-else
+              class="grid h-9 w-9 shrink-0 place-items-center rounded border border-espresso bg-paper"
+            >
               <Icon name="ph:music-notes" size="16" class="text-cocoa" />
             </span>
             <span class="min-w-0 flex-1">
@@ -133,7 +141,9 @@ function select(track: TrackCandidate) {
           </button>
         </li>
       </ul>
-      <p v-else-if="searched" class="py-3 text-center text-sm text-cocoa">No tracks found. Try different words.</p>
+      <p v-else-if="searched" class="py-3 text-center text-sm text-cocoa">
+        No tracks found. Try different words.
+      </p>
     </div>
   </li>
 </template>

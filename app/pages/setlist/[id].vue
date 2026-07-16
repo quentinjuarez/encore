@@ -1,20 +1,24 @@
 <script setup lang="ts">
-const route = useRoute()
-const { loggedIn } = useUserSession()
-const toast = useToast()
+const route = useRoute();
+const { loggedIn } = useUserSession();
+const toast = useToast();
 
-const { data: setlist, pending, error } = await useFetch<Setlist>(() => `/api/setlist/${route.params.id}`)
+const {
+  data: setlist,
+  pending,
+  error,
+} = await useFetch<Setlist>(() => `/api/setlist/${route.params.id}`);
 
 // Continuous song numbering across the main set and any encores.
 const numberedSets = computed(() => {
-  let n = 0
+  let n = 0;
   return (setlist.value?.sets?.set || []).map((set) => {
-    const start = n
-    n += set.song?.length || 0
-    return { set, start }
-  })
-})
-const total = computed(() => (setlist.value ? countSongs(setlist.value) : 0))
+    const start = n;
+    n += set.song?.length || 0;
+    return { set, start };
+  });
+});
+const total = computed(() => (setlist.value ? countSongs(setlist.value) : 0));
 
 useSeoMeta({
   title: () =>
@@ -22,52 +26,55 @@ useSeoMeta({
       ? `${setlist.value.artist.name} at ${setlist.value.venue?.name || 'live'} - Encore`
       : 'Setlist - Encore',
   robots: 'noindex',
-})
+});
 
 // ---- Add-to-Spotify flow ----
-type Phase = 'ready' | 'resolving' | 'preview' | 'creating' | 'done'
-const phase = ref<Phase>('ready')
-const matches = ref<TrackMatch[]>([])
-const included = ref<boolean[]>([])
-const playlistUrl = ref('')
+type Phase = 'ready' | 'resolving' | 'preview' | 'creating' | 'done';
+const phase = ref<Phase>('ready');
+const matches = ref<TrackMatch[]>([]);
+const included = ref<boolean[]>([]);
+const playlistUrl = ref('');
 
-const matchedCount = computed(() => matches.value.filter((m) => m.matched).length)
+const matchedCount = computed(() => matches.value.filter((m) => m.matched).length);
 const selectedUris = computed(() =>
-  matches.value.filter((m, i) => m.matched && included.value[i] && m.uri).map((m) => m.uri as string),
-)
+  matches.value
+    .filter((m, i) => m.matched && included.value[i] && m.uri)
+    .map((m) => m.uri as string),
+);
 
 function connect() {
-  useCookie('encore_redirect', { path: '/', maxAge: 600 }).value = route.fullPath
-  return navigateTo('/auth/spotify', { external: true })
+  useCookie('encore_redirect', { path: '/', maxAge: 600 }).value = route.fullPath;
+  return navigateTo('/auth/spotify', { external: true });
 }
 
 async function resolve() {
-  if (!setlist.value) return
-  const songs = allSongs(setlist.value)
+  if (!setlist.value) return;
+  const songs = allSongs(setlist.value);
   if (!songs.length) {
-    toast.error('This show has no songs listed to match.')
-    return
+    toast.error('This show has no songs listed to match.');
+    return;
   }
-  phase.value = 'resolving'
+  phase.value = 'resolving';
   try {
     const res = await $fetch('/api/spotify/resolve', {
       method: 'POST',
       body: { artist: setlist.value.artist.name, songs },
-    })
-    matches.value = res.matches
-    included.value = res.matches.map((m) => m.matched)
-    phase.value = 'preview'
+    });
+    matches.value = res.matches;
+    included.value = res.matches.map((m) => m.matched);
+    phase.value = 'preview';
   } catch (err) {
-    phase.value = 'ready'
-    reportError(err)
+    phase.value = 'ready';
+    reportError(err);
   }
 }
 
 async function create() {
-  if (!setlist.value || selectedUris.value.length === 0) return
-  const s = setlist.value
-  phase.value = 'creating'
-  const name = `${s.artist.name} - ${s.venue?.name || 'Live'} ${formatSetlistDate(s.eventDate)}`.slice(0, 100)
+  if (!setlist.value || selectedUris.value.length === 0) return;
+  const s = setlist.value;
+  phase.value = 'creating';
+  const name =
+    `${s.artist.name} - ${s.venue?.name || 'Live'} ${formatSetlistDate(s.eventDate)}`.slice(0, 100);
   try {
     const res = await $fetch('/api/spotify/create-playlist', {
       method: 'POST',
@@ -76,20 +83,20 @@ async function create() {
         description: `Setlist from ${s.venue?.name || 'the show'} on ${formatSetlistDate(s.eventDate)}. Built with Encore.`,
         uris: selectedUris.value,
       },
-    })
-    playlistUrl.value = res.url
-    phase.value = 'done'
-    toast.success('Playlist saved to your Spotify.')
+    });
+    playlistUrl.value = res.url;
+    phase.value = 'done';
+    toast.success('Playlist saved to your Spotify.');
   } catch (err) {
-    phase.value = 'preview'
-    reportError(err)
+    phase.value = 'preview';
+    reportError(err);
   }
 }
 
 // Manual pick from MatchRow's Spotify search: mark it matched and include it.
 function assign(i: number, track: TrackCandidate) {
-  const m = matches.value[i]
-  if (!m) return
+  const m = matches.value[i];
+  if (!m) return;
   matches.value[i] = {
     ...m,
     matched: true,
@@ -97,23 +104,26 @@ function assign(i: number, track: TrackCandidate) {
     title: track.title,
     artist: track.artist,
     albumArt: track.albumArt,
-  }
-  included.value[i] = true
+  };
+  included.value[i] = true;
 }
 
 function reportError(err: unknown) {
-  const body = err as { statusCode?: number; data?: { statusCode?: number; data?: { reason?: string } } }
-  const status = body?.data?.statusCode ?? body?.statusCode
-  const reason = body?.data?.data?.reason
+  const body = err as {
+    statusCode?: number;
+    data?: { statusCode?: number; data?: { reason?: string } };
+  };
+  const status = body?.data?.statusCode ?? body?.statusCode;
+  const reason = body?.data?.data?.reason;
 
   if (status === 401) {
-    toast.error('Your Spotify session expired. Sign out and reconnect.')
+    toast.error('Your Spotify session expired. Sign out and reconnect.');
   } else if (reason) {
-    toast.error(`Spotify: ${reason}`)
+    toast.error(`Spotify: ${reason}`);
   } else if (status === 403) {
-    toast.error('Spotify refused this. Sign out and reconnect to refresh permissions.')
+    toast.error('Spotify refused this. Sign out and reconnect to refresh permissions.');
   } else {
-    toast.error('Something went wrong talking to Spotify. Try again.')
+    toast.error('Something went wrong talking to Spotify. Try again.');
   }
 }
 </script>
@@ -149,8 +159,11 @@ function reportError(err: unknown) {
             {{ setlist.artist.name }}
           </h1>
           <p class="mt-1 text-cocoa">
-            {{ setlist.venue?.name }}<template v-if="setlist.venue?.city?.name">, {{ setlist.venue.city.name }}</template>
-            <template v-if="setlist.venue?.city?.country?.name">, {{ setlist.venue.city.country.name }}</template>
+            {{ setlist.venue?.name
+            }}<template v-if="setlist.venue?.city?.name">, {{ setlist.venue.city.name }}</template>
+            <template v-if="setlist.venue?.city?.country?.name"
+              >, {{ setlist.venue.city.country.name }}</template
+            >
           </p>
           <p v-if="setlist.tour?.name" class="mt-2">
             <span class="badge">{{ setlist.tour.name }}</span>
@@ -169,12 +182,19 @@ function reportError(err: unknown) {
               {{ set.encore ? `Encore ${set.encore}` : set.name }}
             </p>
             <ol>
-              <SongRow v-for="(song, i) in set.song" :key="`${si}-${i}`" :index="start + i + 1" :song="song" />
+              <SongRow
+                v-for="(song, i) in set.song"
+                :key="`${si}-${i}`"
+                :index="start + i + 1"
+                :song="song"
+              />
             </ol>
           </div>
           <p class="mt-4 border-t border-sand pt-3 font-mono text-xs text-cocoa">
             {{ total }} songs · source
-            <a :href="setlist.url" class="underline decoration-mustard underline-offset-2">setlist.fm</a>
+            <a :href="setlist.url" class="underline decoration-mustard underline-offset-2"
+              >setlist.fm</a
+            >
           </p>
         </div>
       </article>
@@ -189,7 +209,9 @@ function reportError(err: unknown) {
 
             <!-- Not connected -->
             <template v-if="phase === 'ready' && !loggedIn">
-              <p class="mt-2 text-sm text-cocoa">Connect your Spotify account to build this set as a playlist.</p>
+              <p class="mt-2 text-sm text-cocoa">
+                Connect your Spotify account to build this set as a playlist.
+              </p>
               <UiButton block class="mt-4" @click="connect">
                 <Icon name="ph:spotify-logo-fill" size="20" /> Connect Spotify
               </UiButton>
@@ -197,14 +219,19 @@ function reportError(err: unknown) {
 
             <!-- Connected, ready to match -->
             <template v-else-if="phase === 'ready'">
-              <p class="mt-2 text-sm text-cocoa">We'll find each of these {{ total }} songs on Spotify first.</p>
+              <p class="mt-2 text-sm text-cocoa">
+                We'll find each of these {{ total }} songs on Spotify first.
+              </p>
               <UiButton block class="mt-4" :disabled="total === 0" @click="resolve">
                 <Icon name="ph:magic-wand-bold" size="20" /> Match this set
               </UiButton>
             </template>
 
             <!-- Resolving -->
-            <div v-else-if="phase === 'resolving'" class="mt-6 flex flex-col items-center gap-3 py-4 text-burnt">
+            <div
+              v-else-if="phase === 'resolving'"
+              class="mt-6 flex flex-col items-center gap-3 py-4 text-burnt"
+            >
               <UiSpinner :size="34" />
               <p class="text-sm text-cocoa">Finding tracks on Spotify...</p>
             </div>
@@ -212,8 +239,8 @@ function reportError(err: unknown) {
             <!-- Preview matches -->
             <template v-else-if="phase === 'preview'">
               <p class="mt-2 text-sm text-cocoa">
-                Matched <strong class="text-espresso">{{ matchedCount }}</strong> of {{ matches.length }}. Untick a
-                wrong one, or fix a miss with Find it.
+                Matched <strong class="text-espresso">{{ matchedCount }}</strong> of
+                {{ matches.length }}. Untick a wrong one, or fix a miss with Find it.
               </p>
               <ul class="mt-3 max-h-[46vh] overflow-y-auto pr-1">
                 <MatchRow
@@ -230,7 +257,10 @@ function reportError(err: unknown) {
             </template>
 
             <!-- Creating -->
-            <div v-else-if="phase === 'creating'" class="mt-6 flex flex-col items-center gap-3 py-4 text-burnt">
+            <div
+              v-else-if="phase === 'creating'"
+              class="mt-6 flex flex-col items-center gap-3 py-4 text-burnt"
+            >
               <UiSpinner :size="34" />
               <p class="text-sm text-cocoa">Saving to your Spotify...</p>
             </div>
@@ -238,16 +268,22 @@ function reportError(err: unknown) {
             <!-- Done -->
             <template v-else-if="phase === 'done'">
               <div class="mt-3 flex flex-col items-center gap-2 py-2 text-center">
-                <span class="grid h-14 w-14 place-items-center rounded-full border-2 border-espresso bg-teal text-paper">
+                <span
+                  class="grid h-14 w-14 place-items-center rounded-full border-2 border-espresso bg-teal text-paper"
+                >
                   <Icon name="ph:check-bold" size="26" />
                 </span>
                 <p class="font-display text-lg font-semibold text-espresso">Playlist saved</p>
-                <p class="text-sm text-cocoa">{{ selectedUris.length }} tracks are waiting in your library.</p>
+                <p class="text-sm text-cocoa">
+                  {{ selectedUris.length }} tracks are waiting in your library.
+                </p>
               </div>
               <UiButton block class="mt-3" :href="playlistUrl">
                 <Icon name="ph:spotify-logo-fill" size="20" /> Open in Spotify
               </UiButton>
-              <UiButton variant="ghost" block class="mt-1" @click="phase = 'ready'">Build another</UiButton>
+              <UiButton variant="ghost" block class="mt-1" @click="phase = 'ready'"
+                >Build another</UiButton
+              >
             </template>
           </div>
         </UiCard>

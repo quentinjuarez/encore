@@ -1,0 +1,7 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error"
+  },
+  "ignorePatterns": [".nuxt", ".output", "dist", "public", ".yarn", ".vercel"]
+}

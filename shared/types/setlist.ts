@@ -2,56 +2,56 @@
 // Placed in shared/ so both server routes and Vue components see the types.
 
 export interface SetlistArtist {
-  mbid: string
-  name: string
-  sortName?: string
-  disambiguation?: string
+  mbid: string;
+  name: string;
+  sortName?: string;
+  disambiguation?: string;
 }
 
 export interface SetlistSong {
-  name: string
-  info?: string
-  tape?: boolean
-  cover?: { mbid?: string; name: string }
-  with?: { name: string }
+  name: string;
+  info?: string;
+  tape?: boolean;
+  cover?: { mbid?: string; name: string };
+  with?: { name: string };
 }
 
 export interface SetlistSet {
-  name?: string
-  encore?: number
-  song: SetlistSong[]
+  name?: string;
+  encore?: number;
+  song: SetlistSong[];
 }
 
 export interface SetlistVenue {
-  name: string
-  city?: { name: string; state?: string; country?: { name: string; code?: string } }
+  name: string;
+  city?: { name: string; state?: string; country?: { name: string; code?: string } };
 }
 
 export interface Setlist {
-  id: string
-  eventDate: string // dd-MM-yyyy
-  artist: SetlistArtist
-  venue: SetlistVenue
-  tour?: { name: string }
-  sets: { set: SetlistSet[] }
-  url: string
+  id: string;
+  eventDate: string; // dd-MM-yyyy
+  artist: SetlistArtist;
+  venue: SetlistVenue;
+  tour?: { name: string };
+  sets: { set: SetlistSet[] };
+  url: string;
 }
 
 // A Spotify track the user can pick from a manual search.
 export interface TrackCandidate {
-  uri: string
-  title: string
-  artist: string
-  albumArt: string | null
+  uri: string;
+  title: string;
+  artist: string;
+  albumArt: string | null;
 }
 
 // One resolved match: a setlist song lined up against a Spotify track.
 export interface TrackMatch {
-  song: string
-  isCover: boolean
-  matched: boolean
-  uri: string | null
-  title: string | null
-  artist: string | null
-  albumArt: string | null
+  song: string;
+  isCover: boolean;
+  matched: boolean;
+  uri: string | null;
+  title: string | null;
+  artist: string | null;
+  albumArt: string | null;
 }

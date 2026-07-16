@@ -6,8 +6,8 @@
         <div class="max-w-sm">
           <Logo :size="34" tone="cream" />
           <p class="mt-3 text-sm leading-relaxed text-cream/70">
-            Encore turns the setlist from a show you loved into a Spotify playlist you can keep. Search a band, pick a
-            night, relive it.
+            Encore turns the setlist from a show you loved into a Spotify playlist you can keep.
+            Search a band, pick a night, relive it.
           </p>
         </div>
         <div class="text-sm text-cream/70">
@@ -15,11 +15,19 @@
           <ul class="mt-2 space-y-1">
             <li>
               Setlists from
-              <a href="https://www.setlist.fm" class="underline decoration-mustard underline-offset-2">setlist.fm</a>
+              <a
+                href="https://www.setlist.fm"
+                class="underline decoration-mustard underline-offset-2"
+                >setlist.fm</a
+              >
             </li>
             <li>
               Playlists via
-              <a href="https://developer.spotify.com" class="underline decoration-mustard underline-offset-2">Spotify</a>
+              <a
+                href="https://developer.spotify.com"
+                class="underline decoration-mustard underline-offset-2"
+                >Spotify</a
+              >
             </li>
           </ul>
           <p class="mt-4 text-xs text-cream/50">

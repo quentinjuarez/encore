@@ -2,7 +2,6 @@
   "name": "encore",
   "private": true,
   "type": "module",
-  "packageManager": "yarn@3.8.6",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
@@ -11,7 +10,11 @@
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
     "assets": "node scripts/generate-assets.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
     "@nuxt/fonts": "^0.14.0",
@@ -24,8 +27,11 @@
   "devDependencies": {
     "@iconify-json/ph": "^1.2.2",
     "@types/node": "^26.1.1",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0",
     "sharp": "^0.35.3",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.7"
-  }
+  },
+  "packageManager": "yarn@3.8.6"
 }

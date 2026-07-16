@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { loggedIn, user, clear } = useUserSession()
+const { loggedIn, user, clear } = useUserSession();
 </script>
 
 <template>
@@ -10,7 +10,10 @@ const { loggedIn, user, clear } = useUserSession()
       </NuxtLink>
 
       <nav class="flex items-center gap-2 sm:gap-4">
-        <NuxtLink to="/#how" class="hidden font-semibold text-cocoa transition-colors hover:text-espresso sm:inline">
+        <NuxtLink
+          to="/#how"
+          class="hidden font-semibold text-cocoa transition-colors hover:text-espresso sm:inline"
+        >
           How it works
         </NuxtLink>
         <template v-if="loggedIn">

@@ -62,8 +62,7 @@ const steps = [
           The show doesn't have to end when the lights come up.
         </h1>
         <p class="mt-4 max-w-md text-lg text-cocoa">
-          Encore rebuilds the setlist from a gig you loved as a Spotify
-          playlist, song for song.
+          Encore rebuilds the setlist from a gig you loved as a Spotify playlist, song for song.
         </p>
 
         <div class="mt-7 max-w-md">
@@ -88,15 +87,9 @@ const steps = [
           class="absolute -left-3 -top-3 h-16 w-24 -rotate-6 rounded bg-mustard/70 shadow"
           aria-hidden="true"
         />
-        <div
-          class="setlist-sheet -rotate-1 rounded-2xl border-2 border-espresso p-6"
-        >
-          <p class="font-mono text-xs uppercase tracking-widest text-cocoa">
-            Red Rocks · 2025
-          </p>
-          <p class="mt-1 font-display text-2xl font-bold text-espresso">
-            The Encore Band
-          </p>
+        <div class="setlist-sheet -rotate-1 rounded-2xl border-2 border-espresso p-6">
+          <p class="font-mono text-xs uppercase tracking-widest text-cocoa">Red Rocks · 2025</p>
+          <p class="mt-1 font-display text-2xl font-bold text-espresso">The Encore Band</p>
           <ol class="mt-4">
             <li
               v-for="(t, i) in [
@@ -129,9 +122,7 @@ const steps = [
     <!-- How it works -->
     <section id="how" class="scroll-mt-20 bg-paper py-16">
       <div class="mx-auto max-w-5xl px-4">
-        <h2
-          class="text-center font-display text-3xl font-bold text-espresso sm:text-4xl"
-        >
+        <h2 class="text-center font-display text-3xl font-bold text-espresso sm:text-4xl">
           Three steps, one souvenir
         </h2>
         <ol class="mt-10 grid gap-6 md:grid-cols-3">
@@ -148,9 +139,7 @@ const steps = [
                     <Icon :name="step.icon" size="22" class="text-espresso" />
                   </span>
                 </div>
-                <h3
-                  class="mt-4 font-display text-xl font-semibold text-espresso"
-                >
+                <h3 class="mt-4 font-display text-xl font-semibold text-espresso">
                   {{ step.title }}
                 </h3>
                 <p class="mt-1 text-cocoa">{{ step.body }}</p>

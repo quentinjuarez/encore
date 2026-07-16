@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ---- Encore design tokens: 70s cream + soul ---- */
 @theme {
@@ -13,9 +13,9 @@
   --color-teal: #2e8c8c;
   --color-rose: #e58c7d;
 
-  --font-display: "Fredoka", "Trebuchet MS", sans-serif;
-  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Space Mono", ui-monospace, "SF Mono", monospace;
+  --font-display: 'Fredoka', 'Trebuchet MS', sans-serif;
+  --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SF Mono', monospace;
 
   --radius-blob: 1.75rem;
 
@@ -101,10 +101,10 @@
   }
 
   /* Drop the browser's default search clear/decoration buttons. */
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-decoration,
-  input[type="search"]::-webkit-search-results-button,
-  input[type="search"]::-webkit-search-results-decoration {
+  input[type='search']::-webkit-search-cancel-button,
+  input[type='search']::-webkit-search-decoration,
+  input[type='search']::-webkit-search-results-button,
+  input[type='search']::-webkit-search-results-decoration {
     -webkit-appearance: none;
     appearance: none;
   }

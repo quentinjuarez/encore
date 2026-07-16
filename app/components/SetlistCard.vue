@@ -1,11 +1,13 @@
 <script setup lang="ts">
-const props = defineProps<{ setlist: Setlist }>()
+const props = defineProps<{ setlist: Setlist }>();
 
-const songs = computed(() => countSongs(props.setlist))
-const date = computed(() => formatSetlistDate(props.setlist.eventDate))
+const songs = computed(() => countSongs(props.setlist));
+const date = computed(() => formatSetlistDate(props.setlist.eventDate));
 const location = computed(() =>
-  [props.setlist.venue?.city?.name, props.setlist.venue?.city?.country?.code].filter(Boolean).join(', '),
-)
+  [props.setlist.venue?.city?.name, props.setlist.venue?.city?.country?.code]
+    .filter(Boolean)
+    .join(', '),
+);
 </script>
 
 <template>

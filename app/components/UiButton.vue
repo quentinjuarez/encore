@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router';
 
 withDefaults(
   defineProps<{
-    to?: RouteLocationRaw
-    href?: string
-    variant?: 'primary' | 'secondary' | 'ghost'
-    type?: 'button' | 'submit'
-    disabled?: boolean
-    block?: boolean
+    to?: RouteLocationRaw;
+    href?: string;
+    variant?: 'primary' | 'secondary' | 'ghost';
+    type?: 'button' | 'submit';
+    disabled?: boolean;
+    block?: boolean;
   }>(),
   { variant: 'primary', type: 'button', disabled: false, block: false },
-)
+);
 
-const NuxtLink = resolveComponent('NuxtLink')
+const NuxtLink = resolveComponent('NuxtLink');
 </script>
 
 <template>

@@ -17,14 +17,14 @@ export default defineOAuthSpotifyEventHandler({
         expiresAt: Date.now() + tokens.expires_in * 1000,
         scope: (tokens as { scope?: string }).scope,
       },
-    })
+    });
 
-    const redirect = getCookie(event, 'encore_redirect') || '/'
-    deleteCookie(event, 'encore_redirect')
-    return sendRedirect(event, redirect)
+    const redirect = getCookie(event, 'encore_redirect') || '/';
+    deleteCookie(event, 'encore_redirect');
+    return sendRedirect(event, redirect);
   },
   onError(event, error) {
-    console.error('Spotify OAuth error:', error)
-    return sendRedirect(event, '/?auth=failed')
+    console.error('Spotify OAuth error:', error);
+    return sendRedirect(event, '/?auth=failed');
   },
-})
+});

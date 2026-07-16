@@ -1,16 +1,16 @@
 <script setup lang="ts">
-const route = useRoute()
-const q = computed(() => String(route.query.q || '').trim())
+const route = useRoute();
+const q = computed(() => String(route.query.q || '').trim());
 
 const { data, pending, error } = await useFetch('/api/artists', {
   query: { q },
   watch: [q],
-})
+});
 
 useSeoMeta({
   title: () => (q.value ? `${q.value} - Encore` : 'Search - Encore'),
   robots: 'noindex',
-})
+});
 </script>
 
 <template>
