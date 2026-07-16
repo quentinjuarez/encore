@@ -17,3 +17,13 @@ export function countSongs(setlist: Setlist): number {
 export function allSongs(setlist: Setlist): SetlistSong[] {
   return (setlist.sets?.set || []).flatMap((s) => s.song || [])
 }
+
+// Lowercase, strip accents and punctuation. Used for loose text filtering.
+export function normalizeText(input: string): string {
+  return (input || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+}
