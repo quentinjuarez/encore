@@ -104,6 +104,7 @@ function assign(i: number, track: TrackCandidate) {
     title: track.title,
     artist: track.artist,
     albumArt: track.albumArt,
+    url: track.url,
   };
   included.value[i] = true;
 }
@@ -204,7 +205,7 @@ function reportError(err: unknown) {
         <UiCard>
           <div class="p-6">
             <h2 class="flex items-center gap-2 font-display text-xl font-semibold text-espresso">
-              <Icon name="ph:spotify-logo-fill" size="24" class="text-teal" /> Add to Spotify
+              <SpotifyMark :size="22" class="text-[#1db954]" /> Add to Spotify
             </h2>
 
             <!-- Not connected -->
@@ -213,8 +214,12 @@ function reportError(err: unknown) {
                 Connect your Spotify account to build this set as a playlist.
               </p>
               <UiButton block class="mt-4" @click="connect">
-                <Icon name="ph:spotify-logo-fill" size="20" /> Connect Spotify
+                <SpotifyMark :size="20" /> Connect Spotify
               </UiButton>
+              <p class="mt-2 text-xs text-cocoa/70">
+                Encore runs in Spotify's developer mode, so only Spotify accounts the owner has
+                added can connect.
+              </p>
             </template>
 
             <!-- Connected, ready to match -->
@@ -242,7 +247,10 @@ function reportError(err: unknown) {
                 Matched <strong class="text-espresso">{{ matchedCount }}</strong> of
                 {{ matches.length }}. Untick a wrong one, or fix a miss with Find it.
               </p>
-              <ul class="mt-3 max-h-[46vh] overflow-y-auto pr-1">
+              <p class="mt-2 flex items-center gap-1.5 text-xs text-cocoa">
+                <SpotifyMark :size="14" class="text-[#1db954]" /> Matches from Spotify
+              </p>
+              <ul class="mt-2 max-h-[46vh] overflow-y-auto pr-1">
                 <MatchRow
                   v-for="(m, i) in matches"
                   :key="i"
@@ -279,7 +287,7 @@ function reportError(err: unknown) {
                 </p>
               </div>
               <UiButton block class="mt-3" :href="playlistUrl">
-                <Icon name="ph:spotify-logo-fill" size="20" /> Open in Spotify
+                <SpotifyMark :size="20" /> Open Spotify
               </UiButton>
               <UiButton variant="ghost" block class="mt-1" @click="phase = 'ready'"
                 >Build another</UiButton

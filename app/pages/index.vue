@@ -19,7 +19,9 @@ useSeoMeta({
 const route = useRoute();
 onMounted(() => {
   if (route.query.auth === 'failed') {
-    useToast().error('Spotify connection was cancelled or failed. Try again.');
+    useToast().error(
+      "Spotify connection failed. Encore runs in Spotify's developer mode, so only accounts the owner has added can connect.",
+    );
   }
 });
 
@@ -37,7 +39,7 @@ const steps = [
     body: 'Encore finds each track on Spotify and honestly flags anything it is not sure about.',
   },
   {
-    icon: 'ph:spotify-logo-fill',
+    icon: 'ph:playlist-bold',
     title: 'Keep the playlist',
     body: 'One tap and the whole set lands in your Spotify, ready for the drive home.',
   },
@@ -111,7 +113,7 @@ const steps = [
           <div
             class="mt-4 flex items-center gap-2 rounded-full border-2 border-espresso bg-burnt px-4 py-2 font-display font-semibold text-paper"
           >
-            <Icon name="ph:spotify-logo-fill" size="20" /> Add to Spotify
+            <SpotifyMark :size="18" /> Add to Spotify
           </div>
         </div>
       </div>

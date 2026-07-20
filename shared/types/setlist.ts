@@ -43,6 +43,7 @@ export interface TrackCandidate {
   title: string;
   artist: string;
   albumArt: string | null;
+  url: string | null; // open.spotify.com link, for attribution
 }
 
 // One resolved match: a setlist song lined up against a Spotify track.
@@ -54,4 +55,5 @@ export interface TrackMatch {
   title: string | null;
   artist: string | null;
   albumArt: string | null;
+  url: string | null; // open.spotify.com link, for attribution
 }

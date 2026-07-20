@@ -10,30 +10,50 @@
             Search a band, pick a night, relive it.
           </p>
         </div>
-        <div class="text-sm text-cream/70">
-          <p class="font-display text-base font-semibold text-mustard">Built on</p>
-          <ul class="mt-2 space-y-1">
-            <li>
-              Setlists from
-              <a
-                href="https://www.setlist.fm"
-                class="underline decoration-mustard underline-offset-2"
-                >setlist.fm</a
-              >
-            </li>
-            <li>
-              Playlists via
-              <a
-                href="https://developer.spotify.com"
-                class="underline decoration-mustard underline-offset-2"
-                >Spotify</a
-              >
-            </li>
-          </ul>
-          <p class="mt-4 text-xs text-cream/50">
-            A personal, non-commercial project. Not affiliated with setlist.fm or Spotify.
-          </p>
+        <div class="flex gap-12 text-sm text-cream/70">
+          <div>
+            <p class="font-display text-base font-semibold text-mustard">Built on</p>
+            <ul class="mt-2 space-y-1">
+              <li>
+                Setlists from
+                <a
+                  href="https://www.setlist.fm"
+                  class="underline decoration-mustard underline-offset-2"
+                  >setlist.fm</a
+                >
+              </li>
+              <li>
+                Playlists via
+                <a
+                  href="https://www.spotify.com"
+                  class="underline decoration-mustard underline-offset-2"
+                  >Spotify</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-display text-base font-semibold text-mustard">Legal</p>
+            <ul class="mt-2 space-y-1">
+              <li>
+                <NuxtLink to="/privacy" class="underline decoration-mustard underline-offset-2"
+                  >Privacy</NuxtLink
+                >
+              </li>
+              <li>
+                <NuxtLink to="/terms" class="underline decoration-mustard underline-offset-2"
+                  >Terms</NuxtLink
+                >
+              </li>
+            </ul>
+          </div>
         </div>
+      </div>
+      <div class="mx-auto max-w-5xl px-4 pb-10">
+        <p class="text-xs text-cream/50">
+          A personal, non-commercial project. Encore is not affiliated with, endorsed, or certified
+          by Spotify or setlist.fm.
+        </p>
       </div>
     </div>
   </footer>

@@ -3,6 +3,7 @@ interface SpotifyTrack {
   name: string;
   artists: { name: string }[];
   album: { images: { url: string }[] };
+  external_urls: { spotify: string };
 }
 
 // Free-text Spotify track search, used to fix or replace a match by hand.
@@ -19,6 +20,7 @@ export default defineEventHandler(async (event) => {
     title: t.name,
     artist: t.artists.map((a) => a.name).join(', '),
     albumArt: t.album?.images?.at(-1)?.url ?? null,
+    url: t.external_urls?.spotify ?? null,
   }));
 
   return { tracks };

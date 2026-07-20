@@ -61,5 +61,16 @@ The song-to-track matching heuristic lives in `lib/match.js` and is covered by
 
 ## Deploy
 
-Push to GitHub, import the repo in Vercel, set the same environment variables,
-and add your production `/auth/spotify` redirect URI to the Spotify app.
+Runs on Vercel at `https://encore.quentinjuarez.dev`. Push to GitHub, import the
+repo in Vercel, set the same environment variables (with
+`NUXT_PUBLIC_SITE_URL=https://encore.quentinjuarez.dev`), and add
+`https://encore.quentinjuarez.dev/auth/spotify` as a redirect URI in the Spotify
+app.
+
+## Spotify access
+
+The Spotify app runs in Development Mode, which allows up to 5 allowlisted
+Spotify accounts (the owner must have Premium). Extended Quota Mode, which would
+lift that cap, is only available to organizations, so this personal build stays
+invite-only by design. See `docs/spotify-compliance.md` for the compliance
+notes and app-profile details.

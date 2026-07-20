@@ -109,6 +109,16 @@ useSeoMeta({
         <h1 class="mt-1 font-display text-3xl font-bold text-espresso sm:text-4xl">
           {{ artistName }}
         </h1>
+        <p class="mt-1 text-xs text-cocoa">
+          Setlists from
+          <a
+            href="https://www.setlist.fm"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline decoration-mustard underline-offset-2"
+            >setlist.fm</a
+          >
+        </p>
       </header>
 
       <div

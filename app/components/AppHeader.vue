@@ -20,7 +20,7 @@ const { loggedIn, user, clear } = useUserSession();
           <span
             class="hidden items-center gap-1.5 rounded-full border-2 border-espresso bg-teal px-3 py-1 text-sm font-bold text-paper sm:inline-flex"
           >
-            <Icon name="ph:spotify-logo-fill" size="18" />
+            <SpotifyMark :size="16" />
             {{ user?.name || 'Connected' }}
           </span>
           <UiButton variant="ghost" @click="clear()">Sign out</UiButton>

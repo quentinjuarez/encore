@@ -5,6 +5,7 @@ interface SpotifyTrack {
   name: string;
   artists: { name: string }[];
   album: { images: { url: string }[] };
+  external_urls: { spotify: string };
 }
 interface SpotifySearch {
   tracks: { items: SpotifyTrack[] };
@@ -26,7 +27,7 @@ export default defineEventHandler(async (event): Promise<{ matches: TrackMatch[]
     let items = await search(event, buildQuery(song.name, searchArtist));
     if (items.length === 0) items = await search(event, buildLooseQuery(song.name, searchArtist));
 
-    const best = pickBestMatch(song.name, searchArtist, items);
+    const best = pickBestMatch(song.name, searchArtist, items) as SpotifyTrack | null;
     return {
       song: song.name,
       isCover: Boolean(song.cover),
@@ -35,6 +36,7 @@ export default defineEventHandler(async (event): Promise<{ matches: TrackMatch[]
       title: best?.name ?? null,
       artist: best?.artists?.map((a) => a.name).join(', ') ?? null,
       albumArt: best?.album?.images?.at(-1)?.url ?? null,
+      url: best?.external_urls?.spotify ?? null,
     };
   });
 

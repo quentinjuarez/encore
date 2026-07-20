@@ -74,7 +74,18 @@ function select(track: TrackCandidate) {
 
       <span class="min-w-0 flex-1">
         <span class="block truncate font-medium text-espresso">{{ match.song }}</span>
-        <span v-if="match.matched" class="block truncate text-sm text-cocoa"
+        <a
+          v-if="match.matched && match.url"
+          :href="match.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center gap-1 text-sm text-cocoa hover:text-espresso"
+          :title="`Open ${match.title} on Spotify`"
+        >
+          <span class="truncate">{{ match.title }} · {{ match.artist }}</span>
+          <SpotifyMark :size="12" class="shrink-0 text-[#1db954]" />
+        </a>
+        <span v-else-if="match.matched" class="block truncate text-sm text-cocoa"
           >{{ match.title }} · {{ match.artist }}</span
         >
         <span v-else class="block truncate text-sm text-burnt">No confident match</span>
