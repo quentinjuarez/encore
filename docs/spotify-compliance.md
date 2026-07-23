@@ -55,7 +55,21 @@ Encore is a free, non-commercial personal project.
 - **Privacy policy:** https://encore.quentinjuarez.dev/privacy
 - **Terms of use:** https://encore.quentinjuarez.dev/terms
 
+## Deezer (second provider)
+
+Because Spotify caps individual apps at 5 users, Deezer is the open path and the
+default in the UI. Compliance notes:
+
+- Free Deezer developer app; OAuth with the `manage_library` permission (create
+  playlists) plus `basic_access`. No premium required, for the owner or users.
+- Deezer content is attributed with the Deezer mark, and matched tracks link back
+  to Deezer, mirroring the Spotify treatment.
+- Tokens are held in the same encrypted session cookie; no database; cleared on
+  sign out. No caching beyond immediate use, no analytics, no ML training.
+- **App profile:** name Encore, website https://encore.quentinjuarez.dev, redirect
+  `https://encore.quentinjuarez.dev/auth/deezer` (application domain set to the
+  host), permissions `basic_access,manage_library`.
+
 ## Not covered
 
-Not commercial, no accounts or database, no analytics, single music provider
-(Spotify).
+Not commercial, no accounts or database, no analytics.

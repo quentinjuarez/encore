@@ -37,23 +37,26 @@ export interface Setlist {
   url: string;
 }
 
-// A Spotify track the user can pick from a manual search.
+// Which music service a playlist is built on.
+export type Provider = 'spotify' | 'deezer';
+
+// A track the user can pick from a manual search on a provider.
 export interface TrackCandidate {
-  uri: string;
+  id: string; // provider add-id: Spotify URI or Deezer track id
   title: string;
   artist: string;
   albumArt: string | null;
-  url: string | null; // open.spotify.com link, for attribution
+  url: string | null; // link to the track on the provider, for attribution
 }
 
-// One resolved match: a setlist song lined up against a Spotify track.
+// One resolved match: a setlist song lined up against a provider track.
 export interface TrackMatch {
   song: string;
   isCover: boolean;
   matched: boolean;
-  uri: string | null;
+  id: string | null; // provider add-id: Spotify URI or Deezer track id
   title: string | null;
   artist: string | null;
   albumArt: string | null;
-  url: string | null; // open.spotify.com link, for attribution
+  url: string | null; // link to the track on the provider, for attribution
 }

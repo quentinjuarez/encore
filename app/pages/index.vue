@@ -3,12 +3,12 @@ const { public: pub } = useRuntimeConfig();
 const site = pub.siteUrl;
 
 useSeoMeta({
-  title: 'Encore - turn concert setlists into Spotify playlists',
+  title: 'Encore - turn concert setlists into playlists',
   titleTemplate: null,
   description:
-    'Search a band, pick the exact show you went to, and Encore rebuilds that setlist as a playlist in your own Spotify account.',
+    'Search a band, pick the exact show you went to, and Encore rebuilds that setlist as a playlist on your own Spotify or Deezer.',
   ogTitle: 'Encore',
-  ogDescription: 'Turn concert setlists into Spotify playlists.',
+  ogDescription: 'Turn concert setlists into playlists.',
   ogType: 'website',
   ogUrl: site,
   ogImage: `${site}/og.png`,
@@ -20,7 +20,7 @@ const route = useRoute();
 onMounted(() => {
   if (route.query.auth === 'failed') {
     useToast().error(
-      "Spotify connection failed. Encore runs in Spotify's developer mode, so only accounts the owner has added can connect.",
+      'Connecting failed or was cancelled. Deezer is open to everyone; Spotify is invite-only here (developer mode).',
     );
   }
 });
@@ -36,12 +36,12 @@ const steps = [
   {
     icon: 'ph:waveform-bold',
     title: 'We match every song',
-    body: 'Encore finds each track on Spotify and honestly flags anything it is not sure about.',
+    body: 'Encore finds each track on your music service and honestly flags anything it is not sure about.',
   },
   {
     icon: 'ph:playlist-bold',
     title: 'Keep the playlist',
-    body: 'One tap and the whole set lands in your Spotify, ready for the drive home.',
+    body: 'One tap and the whole set lands in your Spotify or Deezer, ready for the drive home.',
   },
 ];
 </script>
@@ -64,7 +64,7 @@ const steps = [
           The show doesn't have to end when the lights come up.
         </h1>
         <p class="mt-4 max-w-md text-lg text-cocoa">
-          Encore rebuilds the setlist from a gig you loved as a Spotify playlist, song for song.
+          Encore rebuilds the setlist from a gig you loved as a playlist, song for song.
         </p>
 
         <div class="mt-7 max-w-md">
@@ -113,7 +113,7 @@ const steps = [
           <div
             class="mt-4 flex items-center gap-2 rounded-full border-2 border-espresso bg-burnt px-4 py-2 font-display font-semibold text-paper"
           >
-            <SpotifyMark :size="18" /> Add to Spotify
+            <Icon name="ph:playlist-bold" size="18" /> Add to playlist
           </div>
         </div>
       </div>

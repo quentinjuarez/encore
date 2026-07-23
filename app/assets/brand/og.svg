@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Encore - turn concert setlists into Spotify playlists">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Encore - turn concert setlists into playlists">
   <rect width="1200" height="630" fill="#f5ecd7"/>
 
   <!-- sunburst, top-right corner -->
@@ -35,5 +35,5 @@
   <!-- wordmark + tagline (font-family falls back to system bold if Fredoka is absent) -->
   <text x="418" y="300" font-family="Fredoka, 'Trebuchet MS', Verdana, sans-serif" font-size="150" font-weight="700" fill="#2b2118">Encore</text>
   <rect x="422" y="330" width="290" height="12" rx="6" fill="#e0662e"/>
-  <text x="422" y="398" font-family="Nunito, Verdana, sans-serif" font-size="31" fill="#6b5844">Turn concert setlists into Spotify playlists.</text>
+  <text x="422" y="398" font-family="Nunito, Verdana, sans-serif" font-size="31" fill="#6b5844">Turn concert setlists into playlists.</text>
 </svg>

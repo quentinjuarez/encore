@@ -1,8 +1,10 @@
 <script setup lang="ts">
-const props = defineProps<{ match: TrackMatch }>();
+const props = defineProps<{ match: TrackMatch; provider: Provider }>();
 const included = defineModel<boolean>({ default: true });
 const emit = defineEmits<{ assign: [track: TrackCandidate] }>();
 const toast = useToast();
+
+const providerName = computed(() => (props.provider === 'deezer' ? 'Deezer' : 'Spotify'));
 
 const editing = ref(false);
 const query = ref('');
@@ -27,11 +29,11 @@ async function search() {
   if (!q) return;
   searching.value = true;
   try {
-    const res = await $fetch('/api/spotify/search', { query: { q } });
+    const res = await $fetch('/api/search', { query: { q, provider: props.provider } });
     results.value = res.tracks;
     searched.value = true;
   } catch {
-    toast.error('Spotify search failed. Try again.');
+    toast.error(`${providerName.value} search failed. Try again.`);
   } finally {
     searching.value = false;
   }
@@ -80,10 +82,11 @@ function select(track: TrackCandidate) {
           target="_blank"
           rel="noopener noreferrer"
           class="flex items-center gap-1 text-sm text-cocoa hover:text-espresso"
-          :title="`Open ${match.title} on Spotify`"
+          :title="`Open ${match.title} on ${providerName}`"
         >
           <span class="truncate">{{ match.title }} · {{ match.artist }}</span>
-          <SpotifyMark :size="12" class="shrink-0 text-[#1db954]" />
+          <SpotifyMark v-if="provider === 'spotify'" :size="12" class="shrink-0 text-[#1db954]" />
+          <DeezerMark v-else :size="12" class="shrink-0 text-[#a238ff]" />
         </a>
         <span v-else-if="match.matched" class="block truncate text-sm text-cocoa"
           >{{ match.title }} · {{ match.artist }}</span
@@ -107,9 +110,9 @@ function select(track: TrackCandidate) {
         <input
           v-model="query"
           type="search"
-          :aria-label="`Search Spotify for ${match.song}`"
+          :aria-label="`Search ${providerName} for ${match.song}`"
           class="min-w-0 flex-1 rounded-full border-2 border-espresso bg-paper px-3 py-1.5 text-sm text-espresso outline-none"
-          placeholder="Search Spotify"
+          :placeholder="`Search ${providerName}`"
           @keyup.enter="search"
         />
         <button
@@ -125,7 +128,7 @@ function select(track: TrackCandidate) {
         <UiSpinner :size="22" />
       </div>
       <ul v-else-if="results.length" class="mt-2 max-h-56 overflow-y-auto">
-        <li v-for="t in results" :key="t.uri">
+        <li v-for="t in results" :key="t.id">
           <button
             type="button"
             class="flex w-full items-center gap-2 rounded-lg px-1 py-1.5 text-left hover:bg-sand/60"

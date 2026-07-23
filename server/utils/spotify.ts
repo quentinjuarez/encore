@@ -158,3 +158,51 @@ function spotifyError(err: unknown, path: string, grantedScope?: string) {
     data: { reason, status, grantedScope: grantedScope ?? null },
   });
 }
+
+// ---- Higher-level provider operations (used by the neutral API routes) ----
+
+interface SpotifyTrack {
+  uri: string;
+  name: string;
+  artists: { name: string }[];
+  album: { images: { url: string }[] };
+  external_urls: { spotify: string };
+}
+
+export async function spotifySearch(
+  event: H3Event,
+  q: string,
+  limit = 8,
+): Promise<TrackCandidate[]> {
+  const res = await spotifyFetch<{ tracks: { items: SpotifyTrack[] } }>(event, '/search', {
+    query: { q, type: 'track', limit },
+  });
+  return (res.tracks?.items ?? []).map((t) => ({
+    id: t.uri,
+    title: t.name,
+    artist: t.artists.map((a) => a.name).join(', '),
+    albumArt: t.album?.images?.at(-1)?.url ?? null,
+    url: t.external_urls?.spotify ?? null,
+  }));
+}
+
+export async function spotifyCreatePlaylist(
+  event: H3Event,
+  opts: { name: string; description: string; ids: string[] },
+): Promise<{ url: string; added: number }> {
+  const playlist = await spotifyFetch<{ id: string; external_urls: { spotify: string } }>(
+    event,
+    '/me/playlists',
+    { method: 'POST', body: { name: opts.name, description: opts.description, public: false } },
+  );
+
+  // /items is the current endpoint; /tracks is deprecated. Max 100 per request.
+  for (let i = 0; i < opts.ids.length; i += 100) {
+    await spotifyFetch(event, `/playlists/${playlist.id}/items`, {
+      method: 'POST',
+      body: { uris: opts.ids.slice(i, i + 100) },
+    });
+  }
+
+  return { url: playlist.external_urls.spotify, added: opts.ids.length };
+}

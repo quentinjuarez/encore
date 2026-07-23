@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // NUXT_SETLISTFM_API_KEY
     setlistfmApiKey: '',
+    // Deezer OAuth (not a built-in nuxt-auth-utils provider).
+    deezer: {
+      appId: '', // NUXT_DEEZER_APP_ID
+      secret: '', // NUXT_DEEZER_SECRET
+    },
     public: {
       // NUXT_PUBLIC_SITE_URL
       siteUrl: 'http://localhost:3000',
@@ -39,7 +44,7 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            'Encore turns a live concert setlist into a Spotify playlist. Search a band, pick a show, relive it.',
+            'Encore turns a live concert setlist into a playlist on Spotify or Deezer. Search a band, pick a show, relive it.',
         },
       ],
       link: [

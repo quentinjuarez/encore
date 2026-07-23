@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { loggedIn, user, clear } = useUserSession();
+const { loggedIn, session, clear } = useUserSession();
 </script>
 
 <template>
@@ -18,10 +18,18 @@ const { loggedIn, user, clear } = useUserSession();
         </NuxtLink>
         <template v-if="loggedIn">
           <span
+            v-if="session?.deezer"
+            class="hidden items-center gap-1.5 rounded-full border-2 border-espresso bg-teal px-3 py-1 text-sm font-bold text-paper sm:inline-flex"
+          >
+            <DeezerMark :size="16" />
+            {{ session.deezer.name || 'Deezer' }}
+          </span>
+          <span
+            v-if="session?.spotify"
             class="hidden items-center gap-1.5 rounded-full border-2 border-espresso bg-teal px-3 py-1 text-sm font-bold text-paper sm:inline-flex"
           >
             <SpotifyMark :size="16" />
-            {{ user?.name || 'Connected' }}
+            {{ session.spotify.name || 'Spotify' }}
           </span>
           <UiButton variant="ghost" @click="clear()">Sign out</UiButton>
         </template>

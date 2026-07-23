@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-const { loggedIn } = useUserSession();
+const { session } = useUserSession();
 const toast = useToast();
 
 const {
@@ -28,23 +28,40 @@ useSeoMeta({
   robots: 'noindex',
 });
 
-// ---- Add-to-Spotify flow ----
+// ---- Provider selection ----
+// Deezer is the open, everyone-can-use path, so it is the default; Spotify is
+// invite-only (developer mode). Default to whichever is already connected.
+const provider = ref<Provider>(
+  session.value?.spotify && !session.value?.deezer ? 'spotify' : 'deezer',
+);
+const providerName = computed(() => (provider.value === 'deezer' ? 'Deezer' : 'Spotify'));
+const connected = computed(() =>
+  provider.value === 'deezer' ? Boolean(session.value?.deezer) : Boolean(session.value?.spotify),
+);
+
+// ---- Add-to-playlist flow ----
 type Phase = 'ready' | 'resolving' | 'preview' | 'creating' | 'done';
 const phase = ref<Phase>('ready');
 const matches = ref<TrackMatch[]>([]);
 const included = ref<boolean[]>([]);
 const playlistUrl = ref('');
 
+// Switching provider starts the flow over (matches are provider-specific).
+watch(provider, () => {
+  phase.value = 'ready';
+  matches.value = [];
+  included.value = [];
+  playlistUrl.value = '';
+});
+
 const matchedCount = computed(() => matches.value.filter((m) => m.matched).length);
-const selectedUris = computed(() =>
-  matches.value
-    .filter((m, i) => m.matched && included.value[i] && m.uri)
-    .map((m) => m.uri as string),
+const selectedIds = computed(() =>
+  matches.value.filter((m, i) => m.matched && included.value[i] && m.id).map((m) => m.id as string),
 );
 
 function connect() {
   useCookie('encore_redirect', { path: '/', maxAge: 600 }).value = route.fullPath;
-  return navigateTo('/auth/spotify', { external: true });
+  return navigateTo(`/auth/${provider.value}`, { external: true });
 }
 
 async function resolve() {
@@ -56,9 +73,9 @@ async function resolve() {
   }
   phase.value = 'resolving';
   try {
-    const res = await $fetch('/api/spotify/resolve', {
+    const res = await $fetch('/api/resolve', {
       method: 'POST',
-      body: { artist: setlist.value.artist.name, songs },
+      body: { provider: provider.value, artist: setlist.value.artist.name, songs },
     });
     matches.value = res.matches;
     included.value = res.matches.map((m) => m.matched);
@@ -70,37 +87,38 @@ async function resolve() {
 }
 
 async function create() {
-  if (!setlist.value || selectedUris.value.length === 0) return;
+  if (!setlist.value || selectedIds.value.length === 0) return;
   const s = setlist.value;
   phase.value = 'creating';
   const name =
     `${s.artist.name} - ${s.venue?.name || 'Live'} ${formatSetlistDate(s.eventDate)}`.slice(0, 100);
   try {
-    const res = await $fetch('/api/spotify/create-playlist', {
+    const res = await $fetch('/api/create-playlist', {
       method: 'POST',
       body: {
+        provider: provider.value,
         name,
         description: `Setlist from ${s.venue?.name || 'the show'} on ${formatSetlistDate(s.eventDate)}. Built with Encore.`,
-        uris: selectedUris.value,
+        ids: selectedIds.value,
       },
     });
     playlistUrl.value = res.url;
     phase.value = 'done';
-    toast.success('Playlist saved to your Spotify.');
+    toast.success(`Playlist saved to your ${providerName.value}.`);
   } catch (err) {
     phase.value = 'preview';
     reportError(err);
   }
 }
 
-// Manual pick from MatchRow's Spotify search: mark it matched and include it.
+// Manual pick from MatchRow's search: mark it matched and include it.
 function assign(i: number, track: TrackCandidate) {
   const m = matches.value[i];
   if (!m) return;
   matches.value[i] = {
     ...m,
     matched: true,
-    uri: track.uri,
+    id: track.id,
     title: track.title,
     artist: track.artist,
     albumArt: track.albumArt,
@@ -118,13 +136,13 @@ function reportError(err: unknown) {
   const reason = body?.data?.data?.reason;
 
   if (status === 401) {
-    toast.error('Your Spotify session expired. Sign out and reconnect.');
+    toast.error(`Your ${providerName.value} session expired. Sign out and reconnect.`);
   } else if (reason) {
-    toast.error(`Spotify: ${reason}`);
+    toast.error(`${providerName.value}: ${reason}`);
   } else if (status === 403) {
-    toast.error('Spotify refused this. Sign out and reconnect to refresh permissions.');
+    toast.error(`${providerName.value} refused this. Sign out and reconnect to refresh access.`);
   } else {
-    toast.error('Something went wrong talking to Spotify. Try again.');
+    toast.error(`Something went wrong talking to ${providerName.value}. Try again.`);
   }
 }
 </script>
@@ -200,34 +218,57 @@ function reportError(err: unknown) {
         </div>
       </article>
 
-      <!-- Add-to-Spotify panel -->
+      <!-- Add-to-playlist panel -->
       <aside class="lg:sticky lg:top-24 lg:self-start">
         <UiCard>
           <div class="p-6">
-            <h2 class="flex items-center gap-2 font-display text-xl font-semibold text-espresso">
-              <SpotifyMark :size="22" class="text-[#1db954]" /> Add to Spotify
-            </h2>
+            <h2 class="font-display text-xl font-semibold text-espresso">Save as a playlist</h2>
+
+            <!-- Provider chooser: Deezer (open) is primary, Spotify is invite-only -->
+            <div class="mt-3 flex gap-1 rounded-full border-2 border-espresso p-1">
+              <button
+                type="button"
+                class="flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold transition-colors"
+                :class="provider === 'deezer' ? 'bg-burnt text-paper' : 'text-espresso'"
+                @click="provider = 'deezer'"
+              >
+                <DeezerMark :size="15" /> Deezer
+              </button>
+              <button
+                type="button"
+                class="flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold transition-colors"
+                :class="provider === 'spotify' ? 'bg-burnt text-paper' : 'text-espresso'"
+                @click="provider = 'spotify'"
+              >
+                <SpotifyMark :size="15" /> Spotify
+              </button>
+            </div>
 
             <!-- Not connected -->
-            <template v-if="phase === 'ready' && !loggedIn">
-              <p class="mt-2 text-sm text-cocoa">
-                Connect your Spotify account to build this set as a playlist.
+            <template v-if="phase === 'ready' && !connected">
+              <p class="mt-3 text-sm text-cocoa">
+                <template v-if="provider === 'deezer'"
+                  >Connect any Deezer account to build this set as a playlist.</template
+                >
+                <template v-else>Connect Spotify to build this set as a playlist.</template>
               </p>
-              <UiButton block class="mt-4" @click="connect">
-                <SpotifyMark :size="20" /> Connect Spotify
+              <UiButton block class="mt-3" @click="connect">
+                <SpotifyMark v-if="provider === 'spotify'" :size="20" />
+                <DeezerMark v-else :size="20" />
+                Connect {{ providerName }}
               </UiButton>
-              <p class="mt-2 text-xs text-cocoa/70">
-                Encore runs in Spotify's developer mode, so only Spotify accounts the owner has
-                added can connect.
+              <p v-if="provider === 'spotify'" class="mt-2 text-xs text-cocoa/70">
+                Spotify is invite-only here (developer mode), only accounts the owner has added can
+                connect. Deezer is open to everyone.
               </p>
             </template>
 
             <!-- Connected, ready to match -->
             <template v-else-if="phase === 'ready'">
-              <p class="mt-2 text-sm text-cocoa">
-                We'll find each of these {{ total }} songs on Spotify first.
+              <p class="mt-3 text-sm text-cocoa">
+                We'll find each of these {{ total }} songs on {{ providerName }} first.
               </p>
-              <UiButton block class="mt-4" :disabled="total === 0" @click="resolve">
+              <UiButton block class="mt-3" :disabled="total === 0" @click="resolve">
                 <Icon name="ph:magic-wand-bold" size="20" /> Match this set
               </UiButton>
             </template>
@@ -238,17 +279,19 @@ function reportError(err: unknown) {
               class="mt-6 flex flex-col items-center gap-3 py-4 text-burnt"
             >
               <UiSpinner :size="34" />
-              <p class="text-sm text-cocoa">Finding tracks on Spotify...</p>
+              <p class="text-sm text-cocoa">Finding tracks on {{ providerName }}...</p>
             </div>
 
             <!-- Preview matches -->
             <template v-else-if="phase === 'preview'">
-              <p class="mt-2 text-sm text-cocoa">
+              <p class="mt-3 text-sm text-cocoa">
                 Matched <strong class="text-espresso">{{ matchedCount }}</strong> of
                 {{ matches.length }}. Untick a wrong one, or fix a miss with Find it.
               </p>
               <p class="mt-2 flex items-center gap-1.5 text-xs text-cocoa">
-                <SpotifyMark :size="14" class="text-[#1db954]" /> Matches from Spotify
+                <SpotifyMark v-if="provider === 'spotify'" :size="14" class="text-[#1db954]" />
+                <DeezerMark v-else :size="14" class="text-[#a238ff]" />
+                Matches from {{ providerName }}
               </p>
               <ul class="mt-2 max-h-[46vh] overflow-y-auto pr-1">
                 <MatchRow
@@ -256,11 +299,12 @@ function reportError(err: unknown) {
                   :key="i"
                   v-model="included[i]"
                   :match="m"
+                  :provider="provider"
                   @assign="assign(i, $event)"
                 />
               </ul>
-              <UiButton block class="mt-4" :disabled="selectedUris.length === 0" @click="create">
-                Create playlist ({{ selectedUris.length }})
+              <UiButton block class="mt-4" :disabled="selectedIds.length === 0" @click="create">
+                Create playlist ({{ selectedIds.length }})
               </UiButton>
             </template>
 
@@ -270,7 +314,7 @@ function reportError(err: unknown) {
               class="mt-6 flex flex-col items-center gap-3 py-4 text-burnt"
             >
               <UiSpinner :size="34" />
-              <p class="text-sm text-cocoa">Saving to your Spotify...</p>
+              <p class="text-sm text-cocoa">Saving to your {{ providerName }}...</p>
             </div>
 
             <!-- Done -->
@@ -283,11 +327,13 @@ function reportError(err: unknown) {
                 </span>
                 <p class="font-display text-lg font-semibold text-espresso">Playlist saved</p>
                 <p class="text-sm text-cocoa">
-                  {{ selectedUris.length }} tracks are waiting in your library.
+                  {{ selectedIds.length }} tracks are waiting in your {{ providerName }}.
                 </p>
               </div>
               <UiButton block class="mt-3" :href="playlistUrl">
-                <SpotifyMark :size="20" /> Open Spotify
+                <SpotifyMark v-if="provider === 'spotify'" :size="20" />
+                <DeezerMark v-else :size="20" />
+                Open {{ providerName }}
               </UiButton>
               <UiButton variant="ghost" block class="mt-1" @click="phase = 'ready'"
                 >Build another</UiButton

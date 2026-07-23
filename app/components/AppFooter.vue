@@ -6,8 +6,8 @@
         <div class="max-w-sm">
           <Logo :size="34" tone="cream" />
           <p class="mt-3 text-sm leading-relaxed text-cream/70">
-            Encore turns the setlist from a show you loved into a Spotify playlist you can keep.
-            Search a band, pick a night, relive it.
+            Encore turns the setlist from a show you loved into a playlist you can keep. Search a
+            band, pick a night, relive it.
           </p>
         </div>
         <div class="flex gap-12 text-sm text-cream/70">
@@ -28,6 +28,12 @@
                   href="https://www.spotify.com"
                   class="underline decoration-mustard underline-offset-2"
                   >Spotify</a
+                >
+                and
+                <a
+                  href="https://www.deezer.com"
+                  class="underline decoration-mustard underline-offset-2"
+                  >Deezer</a
                 >
               </li>
             </ul>
@@ -52,7 +58,7 @@
       <div class="mx-auto max-w-5xl px-4 pb-10">
         <p class="text-xs text-cream/50">
           A personal, non-commercial project. Encore is not affiliated with, endorsed, or certified
-          by Spotify or setlist.fm.
+          by Spotify, Deezer, or setlist.fm.
         </p>
       </div>
     </div>
