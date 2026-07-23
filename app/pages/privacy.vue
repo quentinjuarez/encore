@@ -19,58 +19,47 @@ useSeoMeta({
 
     <div class="prose mt-6">
       <p>
-        Encore is a personal, non-commercial project that turns concert setlists into playlists on
-        Spotify or Deezer. It is built to hold as little of your data as possible. There is no
-        database and no user account.
+        Encore is a personal, non-commercial project that turns concert setlists into Spotify
+        playlists. It is built to hold as little of your data as possible. There is no database and
+        no user account.
       </p>
 
       <h2>What Encore accesses</h2>
       <p>
-        You choose which music service to connect. On Spotify, Encore requests the
-        <strong>playlist-modify-private</strong> scope (to create your private playlists) and your
-        display name. On Deezer, it requests the <strong>manage_library</strong> permission (to
-        create playlists) and basic profile. Those are the only permissions it asks for, and only
-        for the service you connect.
+        When you choose to connect Spotify, Encore asks Spotify for permission to create and edit
+        your private playlists (the <strong>playlist-modify-private</strong> scope) and to read your
+        display name so it can greet you. That is the only access it requests.
       </p>
 
       <h2>What Encore stores</h2>
       <p>
-        The access (and, for Spotify, refresh) tokens for the service you connect are kept in a
-        single encrypted, http-only session cookie in your browser. They are never written to a
-        database or shared. The cookie is removed when you sign out. Encore does not store the
-        setlists you view or the playlists you create; they live in your music account, not here.
+        Your Spotify access and refresh tokens are kept in a single encrypted, http-only session
+        cookie in your browser. They are never written to a database or shared. The cookie is
+        removed when you sign out. Encore does not store the setlists you view or the playlists you
+        create; they live in your Spotify account, not here.
       </p>
 
       <h2>What Encore does not do</h2>
       <ul>
         <li>No analytics, tracking pixels, or advertising.</li>
         <li>No selling or sharing of your data.</li>
-        <li>No training of machine-learning models on the content it fetches.</li>
-        <li>No caching of that content beyond the moment it is shown to you.</li>
+        <li>No training of machine-learning models on Spotify content.</li>
+        <li>No caching of Spotify content beyond the moment it is shown to you.</li>
       </ul>
 
       <h2>Third parties</h2>
       <p>
         Setlist data comes from
-        <a href="https://www.setlist.fm" target="_blank" rel="noopener noreferrer">setlist.fm</a>,
+        <a href="https://www.setlist.fm" target="_blank" rel="noopener noreferrer">setlist.fm</a>
         and playlists are created through
-        <a href="https://www.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a> or
-        <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer">Deezer</a>
-        depending on what you connect. Your use of those services is also governed by
+        <a href="https://www.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a>.
+        Your use of Spotify is also governed by
         <a
           href="https://www.spotify.com/legal/privacy-policy/"
           target="_blank"
           rel="noopener noreferrer"
-          >Spotify's</a
-        >
-        and
-        <a
-          href="https://www.deezer.com/legal/personal-datas"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Deezer's</a
-        >
-        privacy policies.
+          >Spotify's Privacy Policy</a
+        >.
       </p>
 
       <h2>Cookies</h2>
@@ -85,8 +74,7 @@ useSeoMeta({
         entirely from your
         <a href="https://www.spotify.com/account/apps/" target="_blank" rel="noopener noreferrer"
           >Spotify account under Apps</a
-        >
-        or your Deezer account settings.
+        >.
       </p>
 
       <h2>Contact</h2>
@@ -96,8 +84,8 @@ useSeoMeta({
       </p>
 
       <p>
-        Encore is not affiliated with, endorsed, or certified by Spotify, Deezer, or setlist.fm.
-        This policy may change; the date above reflects the latest revision.
+        Encore is not affiliated with, endorsed, or certified by Spotify or setlist.fm. This policy
+        may change; the date above reflects the latest revision.
       </p>
     </div>
   </div>

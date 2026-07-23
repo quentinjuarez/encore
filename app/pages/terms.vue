@@ -25,10 +25,10 @@ useSeoMeta({
 
       <h2>What Encore is</h2>
       <p>
-        Encore helps you rebuild a concert setlist as a playlist on your own Spotify or Deezer
-        account. It is provided as is, with no warranty and no guarantee of availability, accuracy,
-        or fitness for any purpose. Setlist data is community-sourced from setlist.fm and may be
-        incomplete, and track matching is a best effort you are asked to review before saving.
+        Encore helps you rebuild a concert setlist as a playlist in your own Spotify account. It is
+        provided as is, with no warranty and no guarantee of availability, accuracy, or fitness for
+        any purpose. Setlist data is community-sourced from setlist.fm and may be incomplete, and
+        track matching is a best effort you are asked to review before saving.
       </p>
 
       <h2>Acceptable use</h2>
@@ -36,8 +36,7 @@ useSeoMeta({
         <li>Use Encore for your own personal, non-commercial listening.</li>
         <li>Do not abuse, overload, scrape, or attempt to break the service or its providers.</li>
         <li>
-          Respect the terms of Spotify, Deezer, and setlist.fm while using their content through
-          Encore.
+          Respect the terms of Spotify and setlist.fm while using their content through Encore.
         </li>
       </ul>
 
@@ -46,8 +45,7 @@ useSeoMeta({
         Setlists are provided by
         <a href="https://www.setlist.fm" target="_blank" rel="noopener noreferrer">setlist.fm</a>
         and track data by
-        <a href="https://www.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a> or
-        <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer">Deezer</a>. All
+        <a href="https://www.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a>. All
         trademarks and content belong to their respective owners. Encore claims no ownership of
         them.
       </p>
@@ -56,13 +54,13 @@ useSeoMeta({
       <p>
         Encore is offered without charge and without warranty. To the extent permitted by law, the
         author is not liable for any loss arising from its use, including anything that happens to
-        your Spotify or Deezer library. You use it at your own discretion.
+        your Spotify library. You use it at your own discretion.
       </p>
 
       <h2>Not affiliated</h2>
       <p>
         Encore is an independent project. It is not affiliated with, endorsed, or certified by
-        Spotify, Deezer, or setlist.fm.
+        Spotify or setlist.fm.
       </p>
 
       <h2>Contact</h2>

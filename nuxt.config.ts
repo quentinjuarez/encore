@@ -44,7 +44,7 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            'Encore turns a live concert setlist into a playlist on Spotify or Deezer. Search a band, pick a show, relive it.',
+            'Encore turns a live concert setlist into a Spotify playlist. Search a band, pick a show, relive it.',
         },
       ],
       link: [

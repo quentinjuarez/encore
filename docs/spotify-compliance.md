@@ -57,8 +57,9 @@ Encore is a free, non-commercial personal project.
 
 ## Deezer (second provider)
 
-Because Spotify caps individual apps at 5 users, Deezer is the open path and the
-default in the UI. Compliance notes:
+Deezer is fully wired in the backend but disabled in the UI (Deezer has frozen
+new API app creation, so no credentials can be obtained). It re-enables
+automatically once credentials exist. Compliance notes for when it does:
 
 - Free Deezer developer app; OAuth with the `manage_library` permission (create
   playlists) plus `basic_access`. No premium required, for the owner or users.
