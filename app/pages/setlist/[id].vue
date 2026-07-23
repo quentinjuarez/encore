@@ -29,11 +29,24 @@ useSeoMeta({
 });
 
 // ---- Provider selection ----
-// Deezer is the open, everyone-can-use path, so it is the default; Spotify is
-// invite-only (developer mode). Default to whichever is already connected.
-const provider = ref<Provider>(
-  session.value?.spotify && !session.value?.deezer ? 'spotify' : 'deezer',
-);
+// Only offer providers configured on the server. Deezer is the open path and is
+// preferred when available; Spotify is invite-only (developer mode).
+const { data: providers } = await useFetch('/api/providers');
+const available = computed<Provider[]>(() => {
+  const list: Provider[] = [];
+  if (providers.value?.deezer) list.push('deezer');
+  if (providers.value?.spotify) list.push('spotify');
+  return list.length ? list : ['spotify'];
+});
+
+function pickDefault(): Provider {
+  const av = available.value;
+  if (session.value?.deezer && av.includes('deezer')) return 'deezer';
+  if (session.value?.spotify && av.includes('spotify')) return 'spotify';
+  return av[0] ?? 'spotify';
+}
+const provider = ref<Provider>(pickDefault());
+
 const providerName = computed(() => (provider.value === 'deezer' ? 'Deezer' : 'Spotify'));
 const connected = computed(() =>
   provider.value === 'deezer' ? Boolean(session.value?.deezer) : Boolean(session.value?.spotify),
@@ -224,23 +237,23 @@ function reportError(err: unknown) {
           <div class="p-6">
             <h2 class="font-display text-xl font-semibold text-espresso">Save as a playlist</h2>
 
-            <!-- Provider chooser: Deezer (open) is primary, Spotify is invite-only -->
-            <div class="mt-3 flex gap-1 rounded-full border-2 border-espresso p-1">
+            <!-- Provider chooser (only when more than one is configured). Deezer
+                 is primary when available; Spotify is invite-only. -->
+            <div
+              v-if="available.length > 1"
+              class="mt-3 flex gap-1 rounded-full border-2 border-espresso p-1"
+            >
               <button
+                v-for="p in available"
+                :key="p"
                 type="button"
                 class="flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold transition-colors"
-                :class="provider === 'deezer' ? 'bg-burnt text-paper' : 'text-espresso'"
-                @click="provider = 'deezer'"
+                :class="provider === p ? 'bg-burnt text-paper' : 'text-espresso'"
+                @click="provider = p"
               >
-                <DeezerMark :size="15" /> Deezer
-              </button>
-              <button
-                type="button"
-                class="flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold transition-colors"
-                :class="provider === 'spotify' ? 'bg-burnt text-paper' : 'text-espresso'"
-                @click="provider = 'spotify'"
-              >
-                <SpotifyMark :size="15" /> Spotify
+                <DeezerMark v-if="p === 'deezer'" :size="15" />
+                <SpotifyMark v-else :size="15" />
+                {{ p === 'deezer' ? 'Deezer' : 'Spotify' }}
               </button>
             </div>
 
